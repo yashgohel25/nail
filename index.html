@@ -53,6 +53,41 @@
         border: 1px solid #ccc; /* Optional: Add a border */
         padding: 10px; /* Optional: Add some padding */
     }
+	/* Custom scrollable gallery */
+.scrollable-gallery {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+}
+
+/* Ensure images are displayed inline-block */
+.scrollable-gallery .site-animate {
+    display: inline-block;
+    float: none;
+}
+
+.scrollable-gallery img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Hide horizontal scrollbar on WebKit browsers (e.g., Chrome, Safari) */
+.scrollable-gallery::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+/* Hide horizontal scrollbar on Internet Explorer and Edge */
+.scrollable-gallery {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+/* Hide horizontal scrollbar on Firefox */
+.scrollable-gallery {
+    scrollbar-width: none;  /* Firefox */
+}
+
 	</style>
 </head>
 
