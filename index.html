@@ -538,7 +538,52 @@
                 font-size: 22px;
             }
         }
-        
+        .nav.site-tab-nav.nav-pills .nav-link {
+    border: 2px solid #e91e63; /* Border color as requested */
+    border-radius: 24px; /* Reduced border radius */
+    margin: 0 10px; /* Added gap between buttons */
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+/* Active state styling */
+.nav.site-tab-nav.nav-pills .nav-link.active {
+    background-color: #e91e63;
+    border-color: #e91e63;
+    color: white;
+}
+
+/* Hover state styling */
+.nav.site-tab-nav.nav-pills .nav-link:hover {
+    
+    border-color: #e91e63;
+    transform: translateY(-2px);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .nav.site-tab-nav.nav-pills .nav-link {
+        margin: 5px; /* Reduced gap on mobile */
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .nav.site-tab-nav.nav-pills {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav.site-tab-nav.nav-pills .nav-item {
+        margin-bottom: 10px;
+        width: 100%;
+        max-width: 250px;
+    }
+    
+    .nav.site-tab-nav.nav-pills .nav-link {
+        text-align: center;
+        width: 100%;
+    }
+}
     </style>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQR57JXBTE"></script>
@@ -663,7 +708,7 @@
                 <div class="col-md-12 text-center">
                     <ul class="nav site-tab-nav nav-pills mb-5 justify-content-center" id="pills-tab" role="tablist">
                         <li class="nav-item site-animate">
-                            <a class="nav-link active" id="pills-breakfast-tab" data-toggle="pill" href="#pills-breakfast" role="tab" aria-controls="pills-breakfast" aria-selected="true">Gel Polish</a>
+                            <a class="nav-link active" id="pills-breakfast-tab" data-toggle="pill" href="#pills-breakfast" role="tab" aria-controls="pills-breakfast" aria-selected="true" >Gel Polish</a>
                         </li>
                         <li class="nav-item site-animate">
                             <a class="nav-link" id="pills-lunch-tab" data-toggle="pill" href="#pills-lunch" role="tab" aria-controls="pills-lunch" aria-selected="false">Extensions</a>
