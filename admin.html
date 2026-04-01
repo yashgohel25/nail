@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel – Janki Nail Art</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root{
+      --rose:#c8365a;--rose-dark:#9b1f3e;--rose-light:#fde8ee;
+      --gold:#c9a96e;--ink:#1a0a10;--muted:#6b7280;
+      --bg:#f8f9fc;--white:#ffffff;
+      --border:#e5e7eb;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;
+      --sidebar-w:260px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);}
+    input,select,textarea,button{font-family:inherit;}
+
+    /* ─ Login ─ */
+    #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--rose-dark),var(--rose));display:flex;align-items:center;justify-content:center;z-index:9999;}
+    .login-box{background:#fff;border-radius:24px;padding:3rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+    .login-logo{text-align:center;margin-bottom:2rem;}
+    .login-logo h1{font-size:2rem;font-weight:800;color:var(--rose);}
+    .login-logo p{color:var(--muted);font-size:.9rem;}
+    .login-box label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;}
+    .login-box input{width:100%;padding:.8rem 1rem;border:2px solid var(--border);border-radius:10px;font-size:.95rem;outline:none;transition:all .2s;margin-bottom:1rem;}
+    .login-box input:focus{border-color:var(--rose);}
+    .btn-login{width:100%;padding:.9rem;background:var(--rose);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;}
+    .btn-login:hover{background:var(--rose-dark);}
+    .login-error{color:var(--danger);font-size:.85rem;text-align:center;margin-top:.5rem;display:none;}
+
+    /* ─ App Shell ─ */
+    #app{display:none;}
+    .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--ink);display:flex;flex-direction:column;z-index:100;transition:transform .3s;}
+    .sidebar-logo{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,.08);}
+    .sidebar-logo h2{color:#fff;font-size:1.1rem;font-weight:800;}
+    .sidebar-logo span{color:var(--rose);font-size:.75rem;font-weight:500;display:block;margin-top:.1rem;letter-spacing:.08em;text-transform:uppercase;}
+    .sidebar-nav{flex:1;overflow-y:auto;padding:1rem 0;}
+    .nav-section{padding:.4rem 1rem .2rem;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.12em;}
+    .nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.2rem;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-radius:0;margin:1px 0;font-size:.9rem;}
+    .nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+    .nav-item.active{background:var(--rose);color:#fff;}
+    .nav-item i{width:18px;text-align:center;font-size:.9rem;}
+    .sidebar-footer{padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,.08);}
+    .logout-btn{display:flex;align-items:center;gap:.6rem;color:rgba(255,255,255,.5);cursor:pointer;font-size:.85rem;transition:color .2s;}
+    .logout-btn:hover{color:#fff;}
+
+    /* ─ Main ─ */
+    .main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
+    .topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+    .topbar h3{font-size:1.1rem;font-weight:700;color:var(--ink);}
+    .topbar-right{display:flex;align-items:center;gap:1rem;}
+    .topbar-badge{background:var(--rose-light);color:var(--rose);font-size:.8rem;font-weight:600;padding:.3rem .8rem;border-radius:50px;}
+    .content{padding:2rem;flex:1;}
+
+    /* ─ Cards ─ */
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;margin-bottom:2rem;}
+    .stat-card{background:#fff;border-radius:16px;padding:1.4rem;display:flex;align-items:center;gap:1rem;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+    .stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .stat-info .num{font-size:1.8rem;font-weight:800;line-height:1;}
+    .stat-info .lbl{font-size:.78rem;color:var(--muted);margin-top:.2rem;}
+
+    /* ─ Table ─ */
+    .table-wrap{background:#fff;border-radius:16px;overflow-x:auto;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+    .table-head{padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.8rem;}
+    .table-head h4{font-size:1rem;font-weight:700;}
+    table{width:100%;border-collapse:collapse;}
+    th{padding:.8rem 1.2rem;background:#f9fafb;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;}
+    td{padding:.9rem 1.2rem;border-top:1px solid var(--border);font-size:.88rem;vertical-align:middle;}
+    tr:hover td{background:#fafafa;}
+    .badge{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.72rem;font-weight:700;}
+    .badge-success{background:#dcfce7;color:#166534;}
+    .badge-warning{background:#fef3c7;color:#92400e;}
+    .badge-danger{background:#fee2e2;color:#991b1b;}
+    .badge-info{background:#dbeafe;color:#1e40af;}
+    .badge-purple{background:#ede9fe;color:#5b21b6;}
+
+    /* ─ Buttons ─ */
+    .btn{padding:.55rem 1.2rem;border-radius:8px;font-weight:600;font-size:.82rem;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;}
+    .btn-primary{background:var(--rose);color:#fff;}
+    .btn-primary:hover{background:var(--rose-dark);}
+    .btn-secondary{background:var(--bg);color:var(--ink);border:1px solid var(--border);}
+    .btn-secondary:hover{background:var(--border);}
+    .btn-success{background:#22c55e;color:#fff;}
+    .btn-success:hover{background:#16a34a;}
+    .btn-danger{background:#ef4444;color:#fff;}
+    .btn-danger:hover{background:#dc2626;}
+    .btn-warning{background:#f59e0b;color:#fff;}
+    .btn-warning:hover{background:#d97706;}
+    .btn-sm{padding:.35rem .8rem;font-size:.78rem;}
+
+    /* ─ Search ─ */
+    .search-box{display:flex;align-items:center;gap:.5rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.4rem .8rem;}
+    .search-box input{border:none;background:none;outline:none;font-size:.85rem;width:180px;}
+    .search-box i{color:var(--muted);}
+
+    /* ─ Modal ─ */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:#fff;border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+    .modal-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
+    .modal-header h4{font-size:1.1rem;font-weight:700;}
+    .modal-body{padding:1.5rem;}
+    .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.8rem;}
+    .close-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);padding:.2rem;}
+
+    /* ─ Form ─ */
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .form-group{margin-bottom:1rem;}
+    .form-group label{display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--ink);}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:.7rem .9rem;border:2px solid var(--border);border-radius:8px;font-size:.88rem;outline:none;transition:all .2s;}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--rose);}
+    .form-group textarea{resize:vertical;min-height:80px;}
+    .full{grid-column:1/-1;}
+
+    /* ─ Pages ─ */
+    .page{display:none;}
+    .page.active{display:block;}
+
+    /* ─ Toast ─ */
+    #adminToast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:.8rem 1.5rem;border-radius:10px;z-index:9999;opacity:0;transition:opacity .3s;font-size:.9rem;max-width:320px;}
+    #adminToast.show{opacity:1;}
+    #adminToast.success{background:#166534;}
+    #adminToast.error{background:#991b1b;}
+
+    /* ─ Cert card ─ */
+    .cert-card{background:linear-gradient(135deg,var(--rose-dark),var(--rose));color:#fff;border-radius:16px;padding:1.5rem;margin-top:1rem;}
+    .cert-card h4{font-size:1.1rem;margin-bottom:.5rem;}
+    .cert-id{font-size:1.8rem;font-weight:800;letter-spacing:.05em;font-family:monospace;}
+
+    /* ─ Image preview ─ */
+    .img-preview{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-top:.5rem;display:none;border:2px solid var(--border);}
+
+    @media(max-width:768px){
+      .sidebar{transform:translateX(-100%);}
+      .sidebar.open{transform:translateX(0);}
+      .main{margin-left:0;}
+      .form-row{grid-template-columns:1fr;}
+      #menuToggle{display:block !important;}
+      .close-sidebar-btn{display:block !important;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <h1>🌸 Janki</h1>
+      <p>Nail Art Admin Panel</p>
+    </div>
+    <label>Username</label>
+    <input type="text" id="loginUser" placeholder="admin" onkeypress="if(event.key==='Enter')doLogin()"/>
+    <label>Password</label>
+    <input type="password" id="loginPass" placeholder="••••••••" onkeypress="if(event.key==='Enter')doLogin()"/>
+    <button class="btn-login" onclick="doLogin()">Login</button>
+    <p class="login-error" id="loginErr">Invalid username or password</p>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <h2>🌸 Janki Nail Art</h2>
+          <span>Admin Panel</span>
+        </div>
+        <button onclick="toggleSidebar()" class="close-sidebar-btn" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:1.4rem;cursor:pointer;display:none;padding:0;"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active" onclick="showPage('dashboard',this)"><i class="fas fa-th-large"></i> Dashboard</div>
+      <div class="nav-section">Content</div>
+      <div class="nav-item" onclick="showPage('siteInfo',this)"><i class="fas fa-cog"></i> Site Information</div>
+      <div class="nav-item" onclick="showPage('services',this)"><i class="fas fa-spa"></i> Services</div>
+      <div class="nav-item" onclick="showPage('courses',this)"><i class="fas fa-graduation-cap"></i> Courses</div>
+      <div class="nav-item" onclick="showPage('gallery',this)"><i class="fas fa-images"></i> Gallery</div>
+      <div class="nav-item" onclick="showPage('offers',this)"><i class="fas fa-tag"></i> Offers & Discounts</div>
+      <div class="nav-section">Students & Clients</div>
+      <div class="nav-item" onclick="showPage('inquiries',this)"><i class="fas fa-envelope"></i> Inquiries<span id="inqBadge" style="display:none;background:var(--rose);color:#fff;font-size:.65rem;padding:.1rem .4rem;border-radius:10px;margin-left:auto;font-weight:700;">0</span></div>
+      <div class="nav-item" onclick="showPage('students',this)"><i class="fas fa-user-graduate"></i> Students</div>
+      <div class="nav-item" onclick="showPage('certificates',this)"><i class="fas fa-certificate"></i> Certificates</div>
+      <div class="nav-item" onclick="showPage('bookings',this)"><i class="fas fa-calendar-check"></i> Bookings<span id="bkBadge" style="display:none;background:var(--rose);color:#fff;font-size:.65rem;padding:.1rem .4rem;border-radius:10px;margin-left:auto;font-weight:700;">0</span></div>
+      <div class="nav-section">System</div>
+      <div class="nav-item" onclick="showPage('imageManager',this)"><i class="fas fa-images"></i> Image Manager</div>
+      <div class="nav-item" onclick="showPage('githubSettings',this)"><i class="fab fa-github"></i> GitHub Settings</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <button onclick="toggleSidebar()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--muted);display:none;" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <h3 id="pageTitle">Dashboard</h3>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-badge" id="adminBadge">Admin</span>
+        <a href="/" target="_blank" style="font-size:.82rem;color:var(--rose);text-decoration:none;font-weight:600;"><i class="fas fa-external-link-alt"></i> View Site</a>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- ─ Dashboard ─ -->
+      <div class="page active" id="page-dashboard">
+        <div class="stat-grid" id="statsGrid"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;" class="dash-bottom">
+          <div class="table-wrap">
+            <div class="table-head"><h4>Recent Inquiries</h4></div>
+            <table><thead><tr><th>Name</th><th>Phone</th><th>Status</th></tr></thead>
+            <tbody id="dashInquiries"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:1.5rem;">Loading...</td></tr></tbody></table>
+          </div>
+          <div class="table-wrap">
+            <div class="table-head"><h4>Recent Students</h4></div>
+            <table><thead><tr><th>Name</th><th>Course</th><th>Status</th></tr></thead>
+            <tbody id="dashStudents"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:1.5rem;">Loading...</td></tr></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─ Site Info ─ -->
+      <div class="page" id="page-siteInfo">
+        <div style="background:#fff;border-radius:16px;padding:2rem;box-shadow:0 1px 4px rgba(0,0,0,.04);">
+          <h4 style="margin-bottom:1.5rem;font-size:1.1rem;">Basic Site Information</h4>
+          <div class="form-row">
+            <div class="form-group"><label>Studio Name</label><input type="text" id="si_name"/></div>
+            <div class="form-group"><label>Tagline</label><input type="text" id="si_tagline"/></div>
+            <div class="form-group"><label>Phone</label><input type="text" id="si_phone"/></div>
+            <div class="form-group"><label>WhatsApp Number (with country code)</label><input type="text" id="si_whatsapp"/></div>
+            <div class="form-group"><label>Email</label><input type="email" id="si_email"/></div>
+            <div class="form-group"><label>Address</label><input type="text" id="si_address"/></div>
+            <div class="form-group"><label>Open Hours</label><input type="text" id="si_openHours"/></div>
+            <div class="form-group"><label>Instagram URL</label><input type="text" id="si_instagram"/></div>
+            <div class="form-group full"><label>Description</label><textarea id="si_description" rows="3"></textarea></div>
+            <div class="form-group full"><label>Hero Image URL</label>
+            <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
+              <input type="text" id="si_heroImage" oninput="previewImg('si_heroImage','si_heroPreview')" style="flex:1" placeholder="https://... or upload below"/>
+              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('si_heroFile').click()"><i class="fas fa-upload"></i></button>
+              <input type="file" id="si_heroFile" accept="image/*" style="display:none" onchange="handleFileUpload(this,'si_heroImage','si_heroPreview')"/>
+            </div>
+            <img class="img-preview" id="si_heroPreview"/></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveSiteInfo()"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+      </div>
+
+      <!-- ─ Image Manager ─ -->
+      <div class="page" id="page-imageManager">
+        <div style="background:#fff;border-radius:16px;padding:2rem;box-shadow:0 1px 4px rgba(0,0,0,.04);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <h4 style="font-size:1.1rem;">Image Manager</h4>
+            <div style="display:flex;gap:.8rem;align-items:center;">
+              <label style="display:flex;align-items:center;gap:.5rem;background:var(--rose);color:#fff;padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600;">
+                <i class="fas fa-upload"></i> Upload Image
+                <input type="file" id="im_fileInput" accept="image/*" multiple style="display:none" onchange="uploadImagesToGithub(this)">
+              </label>
+              <button class="btn btn-secondary" onclick="loadImageManager()"><i class="fas fa-sync"></i> Refresh</button>
+            </div>
+          </div>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.5rem;">Images are stored in the <code>images/</code> folder of your GitHub repo and served via jsDelivr CDN. Click any image to copy its URL.</p>
+          <div id="imageManagerGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;">
+            <div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;">Loading images...</div>
+          </div>
+          <div id="imageUploadProgress" style="display:none;margin-top:1rem;background:var(--blush);border-radius:8px;padding:1rem;">
+            <div style="display:flex;align-items:center;gap:.8rem;">
+              <i class="fas fa-spinner fa-spin" style="color:var(--rose)"></i>
+              <span id="imageUploadStatus" style="font-size:.85rem;color:var(--muted);">Uploading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─ GitHub Settings ─ -->
+      <div class="page" id="page-githubSettings">
+        <div style="background:#fff;border-radius:16px;padding:2rem;box-shadow:0 1px 4px rgba(0,0,0,.04);">
+          <h4 style="margin-bottom:1.5rem;font-size:1.1rem;">GitHub Configuration</h4>
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;">Configure your GitHub repository to use it as a storage backend. Changes are saved locally in your browser.</p>
+          <div class="form-row">
+            <div class="form-group full"><label>Personal Access Token (PAT) *</label><input type="password" id="gh_token_input" placeholder="ghp_xxxxxxxxxxxx"/></div>
+            <div class="form-group"><label>Repository Owner</label><input type="text" id="gh_owner_input" placeholder="yashgohel25"/></div>
+            <div class="form-group"><label>Repository Name</label><input type="text" id="gh_repo_input" placeholder="nail"/></div>
+            <div class="form-group"><label>Branch</label><input type="text" id="gh_branch_input" placeholder="main"/></div>
+          </div>
+          <button class="btn btn-primary" onclick="saveGithubSettings()"><i class="fas fa-save"></i> Update Settings</button>
+          
+          <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);">
+             <h4 style="margin-bottom:1rem;color:var(--danger)">Danger Zone</h4>
+             <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;">If you updated site files directly on GitHub, you may need to force refresh the data.</p>
+             <button class="btn btn-secondary" onclick="loadAllDataFromGithub()"><i class="fas fa-sync"></i> Force Sync from GitHub</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─ Services ─ -->
+      <div class="page" id="page-services">
+        <div class="table-wrap">
+          <div class="table-head">
+            <h4>Services</h4>
+            <button class="btn btn-primary" onclick="openModal('serviceModal')"><i class="fas fa-plus"></i> Add Service</button>
+          </div>
+          <table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Duration</th><th>Actions</th></tr></thead>
+          <tbody id="servicesTable"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ─ Courses ─ -->
+      <div class="page" id="page-courses">
+        <div class="table-wrap">
+          <div class="table-head">
+            <h4>Courses</h4>
+            <button class="btn btn-primary" onclick="openModal('courseModal')"><i class="fas fa-plus"></i> Add Course</button>
+          </div>
+          <table><thead><tr><th>Title</th><th>Type</th><th>Duration</th><th>Fee</th><th>Seats</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="coursesTable"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ─ Gallery ─ -->
+      <div class="page" id="page-gallery">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+          <h4 style="font-size:1.1rem;">Gallery Images</h4>
+          <button class="btn btn-primary" onclick="openModal('galleryModal')"><i class="fas fa-plus"></i> Add Image</button>
+        </div>
+        <div id="galleryAdmin" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;"></div>
+      </div>
+
+      <!-- ─ Offers ─ -->
+      <div class="page" id="page-offers">
+        <div class="table-wrap">
+          <div class="table-head">
+            <h4>Offers & Discounts</h4>
+            <button class="btn btn-primary" onclick="openModal('offerModal')"><i class="fas fa-plus"></i> Add Offer</button>
+          </div>
+          <table><thead><tr><th>Title</th><th>Type</th><th>Discount</th><th>Valid Until</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="offersTable"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ─ Inquiries ─ -->
+      <div class="page" id="page-inquiries">
+        <div class="table-wrap">
+          <div class="table-head">
+            <h4>Inquiries</h4>
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="inqSearch" oninput="filterTable('inqSearch','inquiriesTable')"/></div>
+          </div>
+          <table><thead><tr><th>Name</th><th>Phone</th><th>Service</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="inquiriesTable"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ─ Students ─ -->
+      <div class="page" id="page-students">
+        <div class="table-wrap">
+          <div class="table-head">
+            <h4>Student Records</h4>
+            <div style="display:flex;gap:.8rem;">
+              <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="stSearch" oninput="filterTable('stSearch','studentsTable')"/></div>
+              <button class="btn btn-primary" onclick="openModal('studentModal')"><i class="fas fa-plus"></i> Add Student</button>
+            </div>
+          </div>
+          <table><thead><tr><th>Name</th><th>Phone</th><th>Course</th><th>Enroll Date</th><th>Status</th><th>Cert ID</th><th>Actions</th></tr></thead>
+          <tbody id="studentsTable"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ─ Certificates ─ -->
+      <div class="page" id="page-certificates">
+        <div class="table-wrap">
+          <div class="table-head">
+            <h4>Issued Certificates</h4>
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="certSearch" oninput="filterTable('certSearch','certTable')"/></div>
+          </div>
+          <table><thead><tr><th>Cert ID</th><th>Student Name</th><th>Course</th><th>Issue Date</th><th>Status</th></tr></thead>
+          <tbody id="certTable"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ─ Bookings ─ -->
+      <div class="page" id="page-bookings">
+        <div class="table-wrap">
+          <div class="table-head">
+            <h4>Appointment Bookings</h4>
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="bkSearch" oninput="filterTable('bkSearch','bookingsTable')"/></div>
+          </div>
+          <table><thead><tr><th>Name</th><th>Phone</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="bookingsTable"></tbody></table>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ═══════════ MODALS ═══════════ -->
+
+<!-- Service Modal -->
+<div class="modal-overlay" id="serviceModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h4 id="serviceModalTitle">Add Service</h4>
+      <button class="close-btn" onclick="closeModal('serviceModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="svc_id"/>
+      <div class="form-row">
+        <div class="form-group"><label>Service Name *</label><input type="text" id="svc_name"/></div>
+        <div class="form-group"><label>Category</label><input type="text" id="svc_cat" placeholder="e.g. Gel, Basic, Art"/></div>
+        <div class="form-group"><label>Price (₹)</label><input type="number" id="svc_price"/></div>
+        <div class="form-group"><label>Duration</label><input type="text" id="svc_duration" placeholder="e.g. 60 min"/></div>
+        <div class="form-group full"><label>Description</label><textarea id="svc_desc"></textarea></div>
+        <div class="form-group full"><label>Image URL</label>
+          <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
+            <input type="text" id="svc_img" oninput="previewImg('svc_img','svc_imgPrev')" style="flex:1"/>
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('svc_file').click()"><i class="fas fa-upload"></i></button>
+            <input type="file" id="svc_file" style="display:none" onchange="handleFileUpload(this, 'svc_img', 'svc_imgPrev')"/>
+          </div>
+          <img class="img-preview" id="svc_imgPrev"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('serviceModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveService()">Save Service</button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Modal -->
+<div class="modal-overlay" id="courseModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h4 id="courseModalTitle">Add Course</h4>
+      <button class="close-btn" onclick="closeModal('courseModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="crs_id"/>
+      <div class="form-row">
+        <div class="form-group full"><label>Course Title *</label><input type="text" id="crs_title"/></div>
+        <div class="form-group"><label>Type</label>
+          <select id="crs_type"><option value="offline">Offline</option><option value="online">Online</option><option value="both">Both</option></select></div>
+        <div class="form-group"><label>Duration</label><input type="text" id="crs_duration" placeholder="e.g. 30 Days"/></div>
+        <div class="form-group"><label>Fee (₹)</label><input type="number" id="crs_fee"/></div>
+        <div class="form-group"><label>Total Seats</label><input type="number" id="crs_seats"/></div>
+        <div class="form-group"><label>Schedule</label><input type="text" id="crs_schedule" placeholder="e.g. Weekdays 2PM-5PM"/></div>
+        <div class="form-group full"><label>Description</label><textarea id="crs_desc"></textarea></div>
+        <div class="form-group full"><label>Topics (comma separated)</label><input type="text" id="crs_topics" placeholder="Gel Nails, Extensions, 3D Art"/></div>
+        <div class="form-group"><label>Certificate</label>
+          <select id="crs_cert"><option value="true">Yes</option><option value="false">No</option></select></div>
+        <div class="form-group"><label>Status</label>
+          <select id="crs_active"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('courseModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCourse()">Save Course</button>
+    </div>
+  </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal-overlay" id="galleryModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h4 id="galleryModalTitle">Add Gallery Image</h4>
+      <button class="close-btn" onclick="closeModal('galleryModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="gal_id"/>
+      <div class="form-group"><label>Title *</label><input type="text" id="gal_title"/></div>
+      <div class="form-group"><label>Category</label><input type="text" id="gal_cat" placeholder="e.g. Gel, Art, Classic"/></div>
+      <div class="form-group">
+        <label>Image URL *</label>
+        <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
+          <input type="text" id="gal_url" oninput="previewImg('gal_url','gal_prev')" placeholder="https://..." style="flex:1"/>
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('gal_file').click()"><i class="fas fa-upload"></i></button>
+          <input type="file" id="gal_file" style="display:none" onchange="handleFileUpload(this, 'gal_url', 'gal_prev')"/>
+        </div>
+        <img class="img-preview" id="gal_prev" style="height:180px;"/>
+      </div>
+      <div class="form-group"><label>Featured</label>
+        <select id="gal_featured"><option value="false">No</option><option value="true">Yes</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('galleryModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveGallery()">Save Image</button>
+    </div>
+  </div>
+</div>
+
+<!-- Offer Modal -->
+<div class="modal-overlay" id="offerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h4 id="offerModalTitle">Add Offer</h4>
+      <button class="close-btn" onclick="closeModal('offerModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="off_id"/>
+      <div class="form-row">
+        <div class="form-group full"><label>Title *</label><input type="text" id="off_title"/></div>
+        <div class="form-group"><label>Type</label>
+          <select id="off_type"><option value="discount">Discount</option><option value="festive">Festive</option><option value="offer">Offer</option><option value="poster">Poster</option></select></div>
+        <div class="form-group"><label>Discount Amount</label><input type="number" id="off_discount"/></div>
+        <div class="form-group"><label>Discount Type</label>
+          <select id="off_dtype"><option value="percent">Percent (%)</option><option value="flat">Flat (₹)</option></select></div>
+        <div class="form-group"><label>Valid From</label><input type="date" id="off_from"/></div>
+        <div class="form-group"><label>Valid To</label><input type="date" id="off_to"/></div>
+        <div class="form-group full"><label>Description</label><textarea id="off_desc"></textarea></div>
+        <div class="form-group"><label>Background Color</label><input type="color" id="off_bg" value="#c8365a" style="height:42px;padding:.2rem;"/></div>
+        <div class="form-group"><label>Status</label>
+          <select id="off_active"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('offerModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveOffer()">Save Offer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Student Modal -->
+<div class="modal-overlay" id="studentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h4 id="studentModalTitle">Add Student</h4>
+      <button class="close-btn" onclick="closeModal('studentModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="st_id"/>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="st_name"/></div>
+        <div class="form-group"><label>Phone *</label><input type="text" id="st_phone"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="st_email"/></div>
+        <div class="form-group"><label>Course *</label><input type="text" id="st_course" placeholder="Course name"/></div>
+        <div class="form-group"><label>Batch</label><input type="text" id="st_batch" placeholder="e.g. Jan 2025 Batch"/></div>
+        <div class="form-group"><label>Mode</label>
+          <select id="st_mode"><option value="offline">Offline</option><option value="online">Online</option></select></div>
+        <div class="form-group"><label>Enroll Date</label><input type="date" id="st_enroll"/></div>
+        <div class="form-group"><label>Status</label>
+          <select id="st_status"><option value="active">Active</option><option value="completed">Completed</option><option value="dropped">Dropped</option></select></div>
+        <div class="form-group full"><label>Notes</label><textarea id="st_notes" rows="2"></textarea></div>
+      </div>
+      <div id="certSection" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem;">This student has been marked as completed. Issue a certificate?</p>
+        <button class="btn btn-success" onclick="issueCert()"><i class="fas fa-certificate"></i> Issue Certificate</button>
+        <div id="certResult" style="margin-top:.8rem;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('studentModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStudent()">Save Student</button>
+    </div>
+  </div>
+</div>
+
+<div id="adminToast"></div>
+
+<script src="github-api.js"></script>
+<script>
+
+let gData = null, gSha = null, editingStudentId = null;
+
+async function loadAllDataFromGithub() {
+  try {
+    toast('Syncing...', 'info');
+    const { json, sha } = await GithubStorage.getData();
+    gData = json; gSha = sha;
+    toast('Data Synced!', 'success');
+  } catch (e) { toast('Sync Error: ' + e.message, 'error'); }
+}
+
+async function saveToGithub() {
+  try {
+    toast('Saving...', 'info');
+    const res = await GithubStorage.saveData(gData, gSha);
+    gSha = res.content.sha;
+    toast('Saved!', 'success');
+    return true;
+  } catch (e) { toast('Save Error: ' + e.message, 'error'); return false; }
+}
+
+function loadGithubSettings() {
+  ['token','owner','repo','branch'].forEach(k => document.getElementById(`gh_${k}_input`).value = GITHUB_CONFIG[k]);
+}
+
+function saveGithubSettings() {
+  const cfg = { token: 'gh_token_input', owner: 'gh_owner_input', repo: 'gh_repo_input', branch: 'gh_branch_input' };
+  Object.keys(cfg).forEach(k => {
+    const val = document.getElementById(cfg[k]).value.trim();
+    localStorage.setItem(`gh_${k}`, val);
+    GITHUB_CONFIG[k] = val;
+  });
+  toast('Settings Updated!', 'success');
+  loadAllDataFromGithub();
+}
+
+async function handleFileUpload(input, targetId, previewId) {
+  const file = input.files[0]; if (!file) return;
+  try {
+    toast(`Uploading ${file.name}...`, 'info');
+    const url = await GithubStorage.uploadImage(file);
+    document.getElementById(targetId).value = url;
+    if (previewId) { const p = document.getElementById(previewId); p.src = url; p.style.display = 'block'; }
+    toast('Uploaded!', 'success');
+  } catch (e) { toast('Upload Failed: ' + e.message, 'error'); }
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim(), p = document.getElementById('loginPass').value;
+  const admin = gData ? gData.admin : { username: 'admin', password: 'janki@2024' };
+  if (u === admin.username && p === admin.password) {
+    localStorage.setItem('jnaToken', 'admin_token');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadDashboard();
+  } else toast('Invalid credentials', 'error');
+}
+
+function logout() { localStorage.removeItem('jnaToken'); location.reload(); }
+
+async function showPage(name, el) {
+  if (!gData) await loadAllDataFromGithub();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (document.getElementById('page-' + name)) document.getElementById('page-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  const titles = {dashboard:'Dashboard',siteInfo:'Site Info',services:'Services',courses:'Courses',gallery:'Gallery',offers:'Offers',inquiries:'Inquiries',students:'Students',certificates:'Certs',bookings:'Bookings',imageManager:'Image Manager',githubSettings:'GitHub'};
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+  const map = {siteInfo:loadSiteInfoForm,services:loadServicesTable,courses:loadCoursesTable,gallery:loadGalleryAdmin,offers:loadOffersTable,inquiries:loadInquiriesTable,students:loadStudentsTable,certificates:loadCertTable,bookings:loadBookingsTable,imageManager:loadImageManager,githubSettings:loadGithubSettings,dashboard:loadDashboard};
+  if (map[name]) map[name]();
+  if (window.innerWidth <= 768) toggleSidebar();
+}
+
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+function loadDashboard() {
+  const s = { students: gData.students.length, certs: gData.certificates.length, inqs: gData.inquiries.length, newInqs: gData.inquiries.filter(i => i.status === 'new').length };
+  const stats = [ {n:s.students,l:'Students',i:'fa-user-graduate'}, {n:s.certs,l:'Certs',i:'fa-certificate'}, {n:s.inqs,l:'Inquiries',i:'fa-envelope'}, {n:s.newInqs,l:'New',i:'fa-bell'} ];
+  document.getElementById('statsGrid').innerHTML = stats.map(st => `<div class="stat-card"><div class="stat-icon"><i class="fas ${st.i}"></i></div><div class="stat-info"><div class="num">${st.n}</div><div class="lbl">${st.l}</div></div></div>`).join('');
+  const renderList = (id, list) => document.getElementById(id).innerHTML = list.length ? list.slice(-5).reverse().map(item => `<tr><td>${item.name}</td><td>${item.phone || item.course}</td><td>${statusBadge(item.status)}</td></tr>`).join('') : '<tr><td colspan="3">None</td></tr>';
+  renderList('dashInquiries', gData.inquiries); renderList('dashStudents', gData.students);
+}
+
+function statusBadge(s) { const map = {new:'info',active:'success',completed:'success',pending:'warning',replied:'purple',dropped:'danger'}; return `<span class="badge badge-${map[s]||'info'}">${s}</span>`; }
+
+function loadSiteInfoForm() {
+  const d = gData.siteInfo;
+  ['name','tagline','phone','whatsapp','email','address','openHours','instagram','description','heroImage'].forEach(k => document.getElementById(`si_${k}`).value = d[k]||'');
+  if (d.heroImage) { const p = document.getElementById('si_heroPreview'); p.src = d.heroImage; p.style.display='block'; }
+}
+
+function saveSiteInfo() {
+  ['name','tagline','phone','whatsapp','email','address','openHours','instagram','description','heroImage'].forEach(k => gData.siteInfo[k] = document.getElementById(`si_${k}`).value);
+  saveToGithub();
+}
+
+function loadServicesTable() {
+  document.getElementById('servicesTable').innerHTML = gData.services.map(s => `<tr><td>${s.name}</td><td>${s.category}</td><td>₹${s.price}</td><td>${s.duration}</td><td><button class="btn btn-secondary btn-sm" onclick="editService('${s.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteItem('services','${s.id}',loadServicesTable)">Del</button></td></tr>`).join('');
+}
+
+function editService(id) {
+  const s = gData.services.find(i => i.id === id);
+  ['id','name','cat','price','duration','desc','img'].forEach(k => document.getElementById(`svc_${k}`).value = s[k==='cat'?'category':k==='img'?'image':k]||'');
+  if (s.image) { const p = document.getElementById('svc_imgPrev'); p.src=s.image; p.style.display='block'; }
+  openModal('serviceModal');
+}
+
+async function saveService() {
+  const id = document.getElementById('svc_id').value;
+  const s = { id: id || 's_'+Date.now(), name: document.getElementById('svc_name').value, category: document.getElementById('svc_cat').value, price: +document.getElementById('svc_price').value, duration: document.getElementById('svc_duration').value, description: document.getElementById('svc_desc').value, image: document.getElementById('svc_img').value };
+  if (id) gData.services[gData.services.findIndex(x=>x.id===id)] = s; else gData.services.push(s);
+  if (await saveToGithub()) { closeModal('serviceModal'); loadServicesTable(); }
+}
+
+function loadCoursesTable() {
+  document.getElementById('coursesTable').innerHTML = gData.courses.map(c => `<tr><td>${c.title}</td><td>${c.type}</td><td>${c.duration}</td><td>₹${c.fee}</td><td>${c.seats}</td><td>${statusBadge(c.active?'active':'inactive')}</td><td><button class="btn btn-secondary btn-sm" onclick="editCourse('${c.id}')">Edit</button></td></tr>`).join('');
+}
+
+function editCourse(id) {
+  const c = gData.courses.find(i => i.id === id);
+  ['id','title','type','duration','fee','seats', 'schedule','desc','topics','cert','active'].forEach(k => {
+    const el = document.getElementById(`crs_${k}`);
+    if (k==='topics') el.value = (c[k]||[]).join(', ');
+    else el.value = String(c[k==='desc'?'description':k==='cert'?'certificate':k]);
+  });
+  openModal('courseModal');
+}
+
+async function saveCourse() {
+  const id = document.getElementById('crs_id').value;
+  const c = { id: id || 'c_'+Date.now(), title: document.getElementById('crs_title').value, type: document.getElementById('crs_type').value, duration: document.getElementById('crs_duration').value, fee: +document.getElementById('crs_fee').value, seats: +document.getElementById('crs_seats').value, schedule: document.getElementById('crs_schedule').value, description: document.getElementById('crs_desc').value, topics: document.getElementById('crs_topics').value.split(',').map(t=>t.trim()).filter(Boolean), certificate: document.getElementById('crs_cert').value==='true', active: document.getElementById('crs_active').value==='true' };
+  if (id) gData.courses[gData.courses.findIndex(x=>x.id===id)] = c; else gData.courses.push(c);
+  if (await saveToGithub()) { closeModal('courseModal'); loadCoursesTable(); }
+}
+
+function loadGalleryAdmin() {
+  document.getElementById('galleryAdmin').innerHTML = gData.gallery.map(g => `<div class="gal-card"><img src="${g.imageUrl}" style="width:100%;height:120px;object-fit:cover"/><div>${g.title}<br><button onclick="editGallery('${g.id}')">Edit</button><button onclick="deleteItem('gallery','${g.id}',loadGalleryAdmin)">Del</button></div></div>`).join('');
+}
+
+function editGallery(id) {
+  const g = gData.gallery.find(i => i.id === id);
+  ['id','title','cat','url','featured'].forEach(k => document.getElementById(`gal_${k}`).value = String(g[k==='cat'?'category':k==='url'?'imageUrl':k]));
+  if (g.imageUrl) { const p = document.getElementById('gal_prev'); p.src=g.imageUrl; p.style.display='block'; }
+  openModal('galleryModal');
+}
+
+async function saveGallery() {
+  const id = document.getElementById('gal_id').value;
+  const g = { id: id || 'g_'+Date.now(), title: document.getElementById('gal_title').value, category: document.getElementById('gal_cat').value, imageUrl: document.getElementById('gal_url').value, featured: document.getElementById('gal_featured').value==='true', addedDate: new Date().toISOString().split('T')[0] };
+  if (id) gData.gallery[gData.gallery.findIndex(x=>x.id===id)] = g; else gData.gallery.push(g);
+  if (await saveToGithub()) { closeModal('galleryModal'); loadGalleryAdmin(); }
+}
+
+function loadOffersTable() {
+  document.getElementById('offersTable').innerHTML = gData.offers.map(o => `<tr><td>${o.title}</td><td>${o.type}</td><td>${o.discount}${o.discountType==='percent'?'%':'₹'}</td><td>${o.validTo}</td><td>${statusBadge(o.active?'active':'inactive')}</td><td><button onclick="editOffer('${o.id}')">Edit</button></td></tr>`).join('');
+}
+
+function editOffer(id) {
+  const o = gData.offers.find(i => i.id === id);
+  ['id','title','type','discount','dtype','from','to','desc','bg','active'].forEach(k => document.getElementById(`off_${k}`).value = String(o[k==='dtype'?'discountType':k==='from'?'validFrom':k==='to'?'validTo':k==='desc'?'description':k==='bg'?'bgColor':k]));
+  openModal('offerModal');
+}
+
+async function saveOffer() {
+  const id = document.getElementById('off_id').value;
+  const o = { id: id || 'o_'+Date.now(), title: document.getElementById('off_title').value, type: document.getElementById('off_type').value, discount: +document.getElementById('off_discount').value, discountType: document.getElementById('off_dtype').value, validFrom: document.getElementById('off_from').value, validTo: document.getElementById('off_to').value, description: document.getElementById('off_desc').value, bgColor: document.getElementById('off_bg').value, active: document.getElementById('off_active').value==='true' };
+  if (id) gData.offers[gData.offers.findIndex(x=>x.id===id)] = o; else gData.offers.push(o);
+  if (await saveToGithub()) { closeModal('offerModal'); loadOffersTable(); }
+}
+
+function loadInquiriesTable() { document.getElementById('inquiriesTable').innerHTML = gData.inquiries.map(i => `<tr><td>${i.name}</td><td>${i.phone}</td><td>${i.service}</td><td>${statusBadge(i.status)}</td><td><button class="btn btn-secondary btn-sm" onclick="markInquiryReplied('${i.id}')">Replied</button></td></tr>`).join(''); }
+async function markInquiryReplied(id) { gData.inquiries.find(i=>i.id===id).status = 'replied'; if (await saveToGithub()) loadInquiriesTable(); }
+
+function loadBookingsTable() { document.getElementById('bookingsTable').innerHTML = gData.bookings.map(b => `<tr><td>${b.name}</td><td>${b.phone}</td><td>${b.service}</td><td>${b.date}</td><td>${statusBadge(b.status)}</td><td><button class="btn btn-secondary btn-sm" onclick="markBookingConfirmed('${b.id}')">Confirm</button></td></tr>`).join(''); }
+async function markBookingConfirmed(id) { gData.bookings.find(b=>b.id===id).status = 'confirmed'; if (await saveToGithub()) loadBookingsTable(); }
+
+function loadStudentsTable() { document.getElementById('studentsTable').innerHTML = gData.students.map(s => `<tr><td>${s.name}</td><td>${s.phone}</td><td>${s.course}</td><td>${statusBadge(s.status)}</td><td><button class="btn btn-secondary btn-sm" onclick="editStudent('${s.id}')">Edit</button></td></tr>`).join(''); }
+function editStudent(id) {
+  const s = gData.students.find(i => i.id === id); editingStudentId = id;
+  ['id','name','phone','email','course','batch','mode','enroll','status'].forEach(k => document.getElementById(`st_${k}`).value = s[k==='enroll'?'enrollDate':k]||'');
+  document.getElementById('certSection').style.display = (s.status === 'completed' && !s.certId) ? 'block' : 'none';
+  openModal('studentModal');
+}
+async function saveStudent() {
+  const id = document.getElementById('st_id').value;
+  const s = { id: id || 'st_'+Date.now(), name: document.getElementById('st_name').value, phone: document.getElementById('st_phone').value, email: document.getElementById('st_email').value, course: document.getElementById('st_course').value, batch: document.getElementById('st_batch').value, mode: document.getElementById('st_mode').value, enrollDate: document.getElementById('st_enroll').value, status: document.getElementById('st_status').value };
+  if (id) { const old = gData.students.find(x=>x.id===id); s.certId = old.certId; s.completionDate = old.completionDate; gData.students[gData.students.findIndex(x=>x.id===id)] = s; } else gData.students.push(s);
+  if (await saveToGithub()) { closeModal('studentModal'); loadStudentsTable(); }
+}
+function loadCertTable() { document.getElementById('certTable').innerHTML = gData.certificates.map(c => `<tr><td>${c.certId}</td><td>${c.studentName}</td><td>${c.course}</td><td>${c.issueDate}</td></tr>`).join(''); }
+async function issueCert() {
+  const s = gData.students.find(x=>x.id===editingStudentId), certId = 'JNA-'+Date.now();
+  s.certId = certId; s.completionDate = new Date().toISOString().split('T')[0];
+  gData.certificates.push({ certId, studentId: s.id, studentName: s.name, course: s.course, issueDate: s.completionDate });
+  if (await saveToGithub()) { document.getElementById('certSection').style.display='none'; toast('Certificate Issued!','success'); }
+}
+
+async function deleteItem(table, id, cb) { if (confirm('Delete?')) { gData[table].splice(gData[table].findIndex(i=>i.id===id), 1); if (await saveToGithub()) cb(); } }
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { 
+  document.getElementById(id).classList.remove('open');
+  document.getElementById(id).querySelectorAll('input, textarea').forEach(i => i.value = '');
+  document.getElementById(id).querySelectorAll('.img-preview').forEach(p => { p.src = ''; p.style.display = 'none'; });
+}
+function previewImg(inpId, preId) { const url = document.getElementById(inpId).value, p = document.getElementById(preId); if (url) { p.src = url; p.style.display = 'block'; } else p.style.display='none'; }
+function toast(msg, type='success') { const t = document.getElementById('adminToast'); t.textContent = msg; t.className = 'show ' + type; setTimeout(() => t.className = '', 3000); }
+function filterTable(inId, tbId) { const q = document.getElementById(inId).value.toLowerCase(); document.querySelectorAll(`#${tbId} tr`).forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); }
+
+(async () => {
+  if (localStorage.getItem('jnaToken')) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    await loadAllDataFromGithub(); loadDashboard();
+  }
+
+// ─── Image Manager ───────────────────────────────────────────
+async function loadImageManager() {
+  const grid = document.getElementById('imageManagerGrid');
+  grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--rose);"></i><p style="margin-top:1rem;">Loading images from GitHub...</p></div>';
+  if (!GITHUB_CONFIG.token) {
+    grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-key" style="font-size:2rem;color:var(--gold);"></i><p style="margin-top:1rem;">Please configure your GitHub Token in <strong>GitHub Settings</strong> first.</p></div>';
+    return;
+  }
+  const images = await GithubStorage.listImages('images');
+  if (!images.length) {
+    grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-image" style="font-size:2rem;"></i><p style="margin-top:1rem;">No images yet. Upload your first image!</p></div>';
+    return;
+  }
+  grid.innerHTML = images.map(img => `
+    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative;" 
+         onclick="copyImageUrl('${img.url}', this)" title="Click to copy URL">
+      <img src="${img.url}" alt="${img.name}" loading="lazy"
+           style="width:100%;height:130px;object-fit:cover;display:block;"
+           onerror="this.src='https://via.placeholder.com/160x130?text=Loading...'"/>
+      <div style="padding:.5rem .6rem;background:#fff;">
+        <p style="font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${img.name}">${img.name}</p>
+        <div style="display:flex;gap:.3rem;margin-top:.3rem;">
+          <button onclick="event.stopPropagation();copyImageUrl('${img.url}',this.closest('div').parentElement)" 
+                  style="flex:1;font-size:.65rem;padding:.2rem .4rem;background:var(--rose);color:#fff;border:none;border-radius:4px;cursor:pointer;">
+            <i class="fas fa-copy"></i> Copy URL
+          </button>
+          <button onclick="event.stopPropagation();deleteImageFromGithub('${img.path}','${img.sha}',this.closest('div').parentElement.parentElement)"
+                  style="font-size:.65rem;padding:.2rem .4rem;background:#fee2e2;color:#dc2626;border:none;border-radius:4px;cursor:pointer;">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function copyImageUrl(url, el) {
+  navigator.clipboard.writeText(url).then(() => {
+    toast('URL Copied! ' + url.split('/').pop(), 'success');
+    if (el) {
+      const orig = el.style.outline;
+      el.style.outline = '2px solid var(--rose)';
+      setTimeout(() => el.style.outline = orig, 1200);
+    }
+  }).catch(() => {
+    // fallback
+    const t = document.createElement('textarea');
+    t.value = url; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); document.body.removeChild(t);
+    toast('URL Copied!', 'success');
+  });
+}
+
+async function uploadImagesToGithub(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  if (!GITHUB_CONFIG.token) { toast('Configure GitHub Token first!', 'error'); return; }
+  const prog = document.getElementById('imageUploadProgress');
+  const status = document.getElementById('imageUploadStatus');
+  prog.style.display = 'block';
+  let done = 0;
+  for (const file of files) {
+    status.textContent = `Uploading ${file.name} (${done+1}/${files.length})...`;
+    try {
+      await GithubStorage.uploadImage(file, 'images');
+      done++;
+      toast(`Uploaded: ${file.name}`, 'success');
+    } catch(e) {
+      toast(`Failed: ${file.name} — ${e.message}`, 'error');
+    }
+  }
+  prog.style.display = 'none';
+  input.value = '';
+  status.textContent = `Done! ${done}/${files.length} uploaded.`;
+  // Reload grid
+  await loadImageManager();
+}
+
+async function deleteImageFromGithub(filePath, sha, el) {
+  if (!confirm('Delete this image from GitHub? This cannot be undone.')) return;
+  try {
+    toast('Deleting...', 'info');
+    // Need fresh SHA in case it changed
+    await GithubStorage.deleteImage(filePath);
+    el.remove();
+    toast('Image deleted!', 'success');
+  } catch(e) {
+    toast('Delete failed: ' + e.message, 'error');
+  }
+}
+
+})();
+</script>
+</body>
+</html>
+</body>
+</html>

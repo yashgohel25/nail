@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Janki Nail Art – Best Nail Studio in Ahmedabad</title>
+  <meta name="description" content="Professional nail art studio in Ahmedabad. Gel polish, extensions, creative designs & nail art courses. Book now!"/>
+  <link rel="icon" href="img/icon.jpg" type="image/jpg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --rose: #c8365a;
+      --rose-dark: #9b1f3e;
+      --rose-light: #f5d0db;
+      --blush: #fdf0f3;
+      --gold: #c9a96e;
+      --ink: #1a0a10;
+      --muted: #7a5a64;
+      --white: #fffcfd;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);-webkit-user-select:none;user-select:none;}
+    h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;}
+
+    /* ─ Navbar ─ */
+    nav{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(255,252,253,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(200,54,90,0.1);transition:all .3s;}
+    .nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px;}
+    .brand{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--rose);text-decoration:none;letter-spacing:.02em;}
+    .brand span{color:var(--gold);}
+    .nav-links{display:flex;gap:2rem;list-style:none;}
+    .nav-links a{color:var(--ink);text-decoration:none;font-size:.9rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;transition:color .2s;}
+    .nav-links a:hover{color:var(--rose);}
+    .nav-cta{background:var(--rose);color:#fff!important;padding:.5rem 1.4rem;border-radius:50px!important;font-size:.85rem!important;}
+    .nav-cta:hover{background:var(--rose-dark)!important;color:#fff!important;}
+    .hamburger{display:none;cursor:pointer;flex-direction:column;gap:5px;}
+    .hamburger span{width:24px;height:2px;background:var(--ink);transition:all .3s;}
+    .mobile-nav{display:none;flex-direction:column;background:#fff;padding:1.5rem 2rem;gap:1rem;border-bottom:1px solid var(--rose-light);}
+    .mobile-nav a{color:var(--ink);text-decoration:none;font-weight:500;padding:.5rem 0;border-bottom:1px solid var(--rose-light);}
+    @media(max-width:768px){.nav-links{display:none;}.hamburger{display:flex;}.mobile-nav.open{display:flex;}}
+
+    /* ─ Hero ─ */
+    #hero{min-height:100vh;background:linear-gradient(135deg,var(--rose-dark) 0%,var(--rose) 50%,#e85580 100%);display:flex;align-items:center;position:relative;overflow:hidden;padding-top:68px;}
+    .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1400') center/cover no-repeat;opacity:.15;}
+    .hero-shapes{position:absolute;inset:0;pointer-events:none;}
+    .hero-shapes::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:rgba(255,255,255,.04);top:-200px;right:-200px;}
+    .hero-shapes::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.03);bottom:-100px;left:-100px;}
+    .hero-content{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+    .hero-text h1{font-size:clamp(3rem,6vw,5.5rem);font-weight:700;color:#fff;line-height:1.05;margin-bottom:1.5rem;}
+    .hero-text h1 em{font-style:italic;color:var(--rose-light);}
+    .hero-text p{font-size:1.15rem;color:rgba(255,255,255,.8);margin-bottom:2rem;line-height:1.7;}
+    .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+    .btn-gold{background:var(--gold);color:#fff;padding:.9rem 2rem;border-radius:50px;font-weight:600;text-decoration:none;transition:all .3s;}
+    .btn-gold:hover{background:#a8884a;transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.2);}
+    .btn-outline-white{border:2px solid rgba(255,255,255,.5);color:#fff;padding:.9rem 2rem;border-radius:50px;font-weight:600;text-decoration:none;transition:all .3s;}
+    .btn-outline-white:hover{background:rgba(255,255,255,.1);}
+    .hero-badges{display:flex;gap:2rem;margin-top:2.5rem;}
+    .badge-stat{text-align:center;}
+    .badge-stat .num{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:#fff;}
+    .badge-stat .label{font-size:.8rem;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.1em;}
+    .hero-card{background:rgba(255,255,255,.12);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:2rem;text-align:center;}
+    .hero-card img{width:100%;border-radius:16px;height:300px;object-fit:cover;}
+    @media(max-width:900px){.hero-content{grid-template-columns:1fr;}.hero-card{display:none;}.hero-badges{gap:1rem;}}
+
+    /* ─ Sections ─ */
+    section{padding:6rem 0;}
+    .container{max-width:1200px;margin:0 auto;padding:0 2rem;}
+    .section-label{font-size:.8rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);margin-bottom:.8rem;}
+    .section-title{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;color:var(--ink);line-height:1.2;}
+    .section-title em{font-style:italic;color:var(--rose);}
+    .section-sub{font-size:1rem;color:var(--muted);margin-top:.8rem;max-width:520px;line-height:1.7;}
+    .section-header{margin-bottom:3rem;}
+
+    /* ─ Services ─ */
+    #services{background:var(--blush);}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
+    .service-card{background:#fff;border-radius:16px;overflow:hidden;transition:all .3s;box-shadow:0 2px 12px rgba(200,54,90,.06);}
+    .service-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(200,54,90,.15);}
+    .service-card img{width:100%;height:180px;object-fit:cover;}
+    .service-card-body{padding:1.4rem;}
+    .service-cat{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;}
+    .service-card-body h4{font-size:1.2rem;font-weight:700;margin-bottom:.4rem;}
+    .service-price{font-size:1.3rem;font-weight:700;color:var(--rose);font-family:'Cormorant Garamond',serif;}
+    .service-price span{font-size:.85rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;}
+
+    /* ─ Courses ─ */
+    .course-tabs{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;}
+    .course-tab{padding:.6rem 1.6rem;border-radius:50px;font-weight:600;font-size:.9rem;cursor:pointer;transition:all .3s;border:2px solid var(--rose-light);color:var(--muted);}
+    .course-tab.active{background:var(--rose);color:#fff;border-color:var(--rose);}
+    .courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+    .course-card{background:#fff;border-radius:20px;padding:1.8rem;border:1px solid var(--rose-light);transition:all .3s;position:relative;overflow:hidden;}
+    .course-card:hover{border-color:var(--rose);box-shadow:0 8px 28px rgba(200,54,90,.12);}
+    .course-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .9rem;border-radius:50px;font-size:.75rem;font-weight:700;text-transform:uppercase;margin-bottom:1rem;}
+    .badge-online{background:#e3f5e1;color:#2e7d32;}
+    .badge-offline{background:#fce4ec;color:var(--rose-dark);}
+    .course-card h3{font-size:1.4rem;margin-bottom:.5rem;}
+    .course-card p{font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+    .course-meta{display:flex;flex-wrap:wrap;gap:.8rem;margin-bottom:1.2rem;}
+    .meta-tag{display:flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--muted);}
+    .meta-tag i{color:var(--rose);}
+    .course-fee{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--rose);}
+    .course-fee span{font-size:1rem;color:var(--muted);font-family:'DM Sans',sans-serif;}
+    .btn-rose{background:var(--rose);color:#fff;padding:.7rem 1.8rem;border-radius:50px;font-weight:600;text-decoration:none;display:inline-block;transition:all .3s;border:none;cursor:pointer;font-size:.9rem;}
+    .btn-rose:hover{background:var(--rose-dark);color:#fff;transform:translateY(-2px);}
+
+    /* ─ Gallery ─ */
+    #gallery{background:var(--ink);}
+    #gallery .section-title{color:#fff;}
+    #gallery .section-label{color:var(--rose-light);}
+    #gallery .section-sub{color:rgba(255,255,255,.6);}
+    .gallery-marquee {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding: 1rem 0;
+      white-space: nowrap;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .gallery-marquee::-webkit-scrollbar { display: none; }
+    .gallery-marquee img {
+      height: 280px;
+      width: auto;
+      border-radius: 12px;
+      cursor: pointer;
+      flex-shrink: 0;
+      object-fit: cover;
+      transition: all .3s;
+    }
+    .gallery-marquee img:hover { transform: scale(1.02); opacity: .9; }
+
+    /* ─ Offers ─ */
+    #offers{background:var(--blush);}
+    .offers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+    .offer-card{border-radius:20px;padding:2rem;color:#fff;position:relative;overflow:hidden;}
+    .offer-card::before{content:'%';position:absolute;right:-10px;top:-20px;font-size:8rem;font-weight:900;font-family:'Cormorant Garamond',serif;opacity:.12;}
+    .offer-badge{display:inline-block;background:rgba(255,255,255,.2);padding:.2rem .8rem;border-radius:50px;font-size:.75rem;font-weight:700;text-transform:uppercase;margin-bottom:.8rem;}
+    .offer-discount{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:700;line-height:1;}
+    .offer-card h3{font-size:1.2rem;margin:.5rem 0;}
+    .offer-card p{font-size:.9rem;opacity:.85;line-height:1.6;}
+    .offer-valid{font-size:.8rem;opacity:.7;margin-top:1rem;}
+
+    /* ─ Inquiry ─ */
+    .inquiry-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+    .inquiry-info h2{font-size:2.5rem;margin-bottom:1rem;}
+    .inquiry-info p{color:var(--muted);line-height:1.7;margin-bottom:1.5rem;}
+    .contact-list{list-style:none;display:flex;flex-direction:column;gap:1rem;}
+    .contact-list li{display:flex;align-items:center;gap:.8rem;font-size:.95rem;}
+    .contact-list i{width:36px;height:36px;background:var(--rose-light);color:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;}
+    .inquiry-form{background:#fff;border-radius:24px;padding:2.5rem;box-shadow:0 4px 24px rgba(200,54,90,.08);}
+    .form-group{margin-bottom:1.2rem;}
+    .form-group label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem;color:var(--ink);}
+    .form-control{width:100%;padding:.75rem 1rem;border:2px solid var(--rose-light);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;transition:all .3s;background:#fff;outline:none;}
+    .form-control:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(200,54,90,.1);}
+    @media(max-width:768px){.inquiry-wrap{grid-template-columns:1fr;}}
+
+    /* ─ Verify ─ */
+    #verify{background:var(--blush);}
+    .verify-box{max-width:560px;margin:0 auto;text-align:center;}
+    .verify-input-row{display:flex;gap:.8rem;margin-top:1.5rem;}
+    .verify-result{margin-top:1.5rem;padding:1.5rem;border-radius:16px;display:none;}
+    .verify-result.valid{background:#e8f5e9;border:2px solid #4caf50;}
+    .verify-result.invalid{background:#fce4ec;border:2px solid var(--rose);}
+
+    /* ─ Footer ─ */
+    footer{background:var(--ink);color:rgba(255,255,255,.7);padding:4rem 0 2rem;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+    .footer-brand{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:#fff;margin-bottom:1rem;}
+    footer h4{font-family:'DM Sans',sans-serif;font-weight:700;color:#fff;margin-bottom:1rem;font-size:.95rem;text-transform:uppercase;letter-spacing:.08em;}
+    footer ul{list-style:none;}
+    footer ul li{margin-bottom:.5rem;}
+    footer ul li a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.9rem;transition:color .2s;}
+    footer ul li a:hover{color:var(--rose-light);}
+    .footer-social{display:flex;gap:1rem;margin-top:1rem;}
+    .footer-social a{width:36px;height:36px;background:rgba(255,255,255,.08);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+    .footer-social a:hover{background:var(--rose);}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+    @media(max-width:768px){.footer-grid{grid-template-columns:1fr;}}
+
+    /* ─ WhatsApp float ─ */
+    .wa-float{position:fixed;bottom:32px;right:32px;z-index:999;background:#25D366;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:all .3s;text-decoration:none;}
+    .wa-float:hover{background:#128C7E;transform:scale(1.1);color:#fff;}
+
+    /* ─ Toast ─ */
+    #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.8rem 1.8rem;border-radius:50px;font-size:.9rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;}
+    #toast.show{opacity:1;}
+
+    /* ─ Loader ─ */
+    .loading{text-align:center;padding:3rem;color:var(--muted);}
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="#hero">Janki <span>Nail Art</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#offers">Offers</a></li>
+      <li><a href="#inquiry">Contact</a></li>
+      <li><a href="#verify">Verify</a></li>
+      <li><a href="#inquiry" class="nav-cta">Book Now</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#services" onclick="closeMenu()">Services</a>
+    <a href="#courses" onclick="closeMenu()">Courses</a>
+    <a href="#gallery" onclick="closeMenu()">Gallery</a>
+    <a href="#offers" onclick="closeMenu()">Offers</a>
+    <a href="#inquiry" onclick="closeMenu()">Contact</a>
+    <a href="#verify" onclick="closeMenu()">Verify Certificate</a>
+    <a href="admin.html">Admin Panel</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-shapes"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <p class="section-label" style="color:var(--rose-light)">✦ Ahmedabad's Premier Studio</p>
+      <h1>Where Nails Become <em>Art</em></h1>
+      <p id="hero-tagline">Professional nail artistry, courses & creativity — all under one roof in Ahmedabad.</p>
+      <div class="hero-btns">
+        <a href="#inquiry" class="btn-gold">Book Appointment</a>
+        <a href="#courses" class="btn-outline-white">Explore Courses</a>
+      </div>
+      <div class="hero-badges">
+        <div class="badge-stat"><div class="num">500+</div><div class="label">Happy Clients</div></div>
+        <div class="badge-stat"><div class="num">200+</div><div class="label">Students</div></div>
+        <div class="badge-stat"><div class="num">5★</div><div class="label">Rated</div></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600" alt="Nail Art"/>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">✦ What We Offer</p>
+      <h2 class="section-title">Our <em>Services</em></h2>
+      <p class="section-sub">From classic manicures to intricate nail art — we do it all with precision and love.</p>
+    </div>
+    <div class="services-grid" id="servicesGrid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
+  </div>
+</section>
+
+<!-- Courses -->
+<section id="courses">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">✦ Learn With Us</p>
+      <h2 class="section-title">Nail Art <em>Courses</em></h2>
+      <p class="section-sub">Whether you're a beginner or want to go pro — we have the perfect course for you, online & offline.</p>
+    </div>
+    <div class="course-tabs">
+      <div class="course-tab active" onclick="filterCourses('all',this)">All Courses</div>
+      <div class="course-tab" onclick="filterCourses('offline',this)">Offline</div>
+      <div class="course-tab" onclick="filterCourses('online',this)">Online</div>
+    </div>
+    <div class="courses-grid" id="coursesGrid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">✦ Our Work</p>
+      <h2 class="section-title">Nail Art <em>Gallery</em></h2>
+      <p class="section-sub" style="color:rgba(255,255,255,.6)">A glimpse into the beautiful nail art we create every day.</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"><div class="loading" style="color:rgba(255,255,255,.5)"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
+  </div>
+</section>
+
+<!-- Offers -->
+<section id="offers">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-label">✦ Special Deals</p>
+      <h2 class="section-title">Offers & <em>Discounts</em></h2>
+      <p class="section-sub">Festive offers, student discounts, and seasonal deals — always something exciting!</p>
+    </div>
+    <div class="offers-grid" id="offersGrid"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div></div>
+  </div>
+</section>
+
+<!-- Inquiry -->
+<section id="inquiry">
+  <div class="container">
+    <div class="inquiry-wrap">
+      <div class="inquiry-info">
+        <p class="section-label">✦ Get In Touch</p>
+        <h2 class="section-title">Book an <em>Appointment</em></h2>
+        <p>Ready for stunning nails? Fill out the form and we'll get back to you to confirm your appointment. Or reach us directly!</p>
+        <ul class="contact-list" id="contactList">
+          <li><i class="fas fa-phone"></i> <span id="infoPhone">Loading...</span></li>
+          <li><i class="fas fa-envelope"></i> <span id="infoEmail">Loading...</span></li>
+          <li><i class="fas fa-map-marker-alt"></i> <span id="infoAddress">Loading...</span></li>
+          <li><i class="fas fa-clock"></i> <span id="infoHours">Loading...</span></li>
+        </ul>
+      </div>
+      <div class="inquiry-form">
+        <h3 style="margin-bottom:1.5rem;font-size:1.6rem;">Send an Inquiry</h3>
+        <div style="display:flex;gap:.5rem;margin-bottom:1.2rem;flex-wrap:wrap;align-items:center;">
+          <button class="course-tab active" id="btnBookService" onclick="setFormType('Book Service', this)" style="padding:.4rem 1rem;font-size:.8rem;">Book Service</button>
+          <button class="course-tab" id="btnCourseEnroll" onclick="setFormType('Enrollment', this)" style="padding:.4rem 1rem;font-size:.8rem;">Course Enrollment</button>
+          <button class="course-tab" id="btnGeneralInq" onclick="setFormType('General Inquiry', this)" style="padding:.4rem 1rem;font-size:.8rem;">General Inquiry</button>
+          <button onclick="clearForm()" type="button" style="background:none;border:none;color:var(--rose);text-decoration:underline;cursor:pointer;margin-left:auto;font-weight:600;font-size:.9rem;">Clear</button>
+        </div>
+        <input type="hidden" id="inqType" value="Book Service"/>
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input class="form-control" id="inqName" type="text" placeholder="Your name"/>
+        </div>
+        <div class="form-group">
+          <label>Phone *</label>
+          <input class="form-control" id="inqPhone" type="tel" placeholder="Your phone"/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-control" id="inqEmail" type="email" placeholder="Your email"/>
+        </div>
+        <div class="form-group">
+          <label id="inqServiceLabel">Service / Course</label>
+          <select class="form-control" id="inqServiceSelect" style="display:none;margin-bottom:.5rem;" onchange="handleSelectChange()"></select>
+          <input class="form-control" id="inqService" type="text" placeholder="e.g. Gel Polish, Basic Course"/>
+        </div>
+        <div id="bookingDateTime" style="display:none; gap:.5rem; flex-wrap:wrap; margin-bottom:1.2rem;">
+          <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
+            <label>Preferred Date</label>
+            <input class="form-control" id="bkDate" type="date"/>
+          </div>
+          <div class="form-group" style="flex:1; min-width:140px; margin-bottom:0;">
+            <label>Preferred Time</label>
+            <input class="form-control" id="bkTime" type="time"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea class="form-control" id="inqMsg" rows="3" placeholder="Tell us what you need..."></textarea>
+        </div>
+        <button class="btn-rose" style="width:100%;padding:1rem;" onclick="submitInquiry()">Send Inquiry</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Verify Certificate -->
+<section id="verify">
+  <div class="container">
+    <div class="verify-box">
+      <p class="section-label">✦ Student Verification</p>
+      <h2 class="section-title">Verify <em>Certificate</em></h2>
+      <p style="color:var(--muted);margin-top:.5rem;">Enter a certificate ID to verify if a student has completed a course at Janki Nail Art.</p>
+      <div class="verify-input-row">
+        <input class="form-control" id="certInput" type="text" placeholder="Enter Certificate ID (e.g. JNA-2024-12345)"/>
+        <button class="btn-rose" onclick="verifyCert()">Verify</button>
+      </div>
+      <div class="verify-result" id="verifyResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Janki Nail Art</div>
+        <p id="footerDesc" style="font-size:.9rem;line-height:1.7;max-width:280px;">Professional nail studio in Ahmedabad.</p>
+        <div class="footer-social">
+          <a href="#" id="footerInsta" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="#" id="footerWa" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#offers">Offers</a></li>
+          <li><a href="#inquiry">Contact</a></li>
+          <li><a href="#verify">Verify Certificate</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#" id="ftPhone">📞 Loading...</a></li>
+          <li><a href="#" id="ftEmail">✉️ Loading...</a></li>
+          <li><a href="#" id="ftAddress" style="white-space:pre-wrap">📍 Loading...</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="footerYear"></span> <span id="footerName">Janki Nail Art</span>. All rights reserved.</span>
+      <a href="admin.html" style="color:rgba(255,255,255,.4);font-size:.8rem;text-decoration:none;">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="wa-float" id="waFloat" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<div id="toast"></div>
+
+<script>
+let gData = null, allServicesList = [], allCourses = [], allGallery = [];
+
+async function loadAllData() {
+  const GITHUB_URL = 'https://raw.githubusercontent.com/yashgohel25/nail/main/data.json';
+  try {
+    const r = await fetch(GITHUB_URL + '?v=' + Date.now());
+    gData = await r.json();
+    loadSiteInfo(); loadServices(); loadCourses(); loadGallery(); loadOffers();
+  } catch(e) { console.error('Error loading data:', e); }
+}
+
+function loadSiteInfo() {
+  const d = gData.siteInfo;
+  document.title = d.name + ' – Best Nail Studio in Ahmedabad';
+  const sets = {
+    'footerDesc': d.description, 'footerAbout': d.description, 'footerName': d.name,
+    'infoPhone': d.phone, 'infoEmail': d.email, 'infoAddress': d.address, 'infoHours': d.openHours,
+    'ftPhone': '📞 ' + d.phone, 'ftEmail': '✉️ ' + d.email, 'ftAddress': '📍 ' + d.address,
+    'hero-tagline': d.description
+  };
+  Object.keys(sets).forEach(id => { const el = document.getElementById(id); if(el) el.textContent = sets[id]; });
+  const wa = 'https://wa.me/' + d.whatsapp.replace(/\D/g,'');
+  ['footerWa','waFloat'].forEach(id => { const el = document.getElementById(id); if(el) el.href = wa; });
+  const h = document.querySelector('.hero-bg'); if(h && d.heroImage) h.style.backgroundImage = `url('${d.heroImage}')`;
+}
+
+function loadServices() {
+  allServicesList = gData.services;
+  document.getElementById('servicesGrid').innerHTML = allServicesList.map(s => `
+    <div class="service-card">
+      <img src="${s.image||'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400'}" alt="${s.name}"/>
+      <div class="service-card-body">
+        <div class="service-cat">${s.category}</div><h4>${s.name}</h4><p>${s.description}</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="service-price">₹${s.price}<span> / ${s.duration}</span></div>
+          <a href="#inquiry" class="btn-rose" onclick="setFormType('Book Service', document.getElementById('btnBookService')); document.getElementById('inqServiceSelect').value='${s.name}'; handleSelectChange();" style="font-size:.8rem;padding:.4rem 1rem;">Book</a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function loadCourses() { allCourses = gData.courses; renderCourses('all'); }
+function renderCourses(type) {
+  const filtered = type === 'all' ? allCourses : allCourses.filter(c => c.type === type);
+  document.getElementById('coursesGrid').innerHTML = filtered.map(c => `
+    <div class="course-card">
+      <span class="course-badge ${c.type==='online'?'badge-online':'badge-offline'}"><i class="fas ${c.type==='online'?'fa-wifi':'fa-map-marker-alt'}"></i> ${c.type}</span>
+      <h3>${c.title}</h3><p>${c.description}</p>
+      <div class="course-meta"><div class="meta-tag"><i class="fas fa-clock"></i>${c.duration}</div><div class="meta-tag"><i class="fas fa-users"></i>${c.seats} seats</div></div>
+      <div class="course-fee">₹${c.fee.toLocaleString()}<span>/course</span></div>
+      <div style="margin-top:1rem;display:flex;gap:.8rem;"><a href="#inquiry" class="btn-rose" onclick="setFormType('Enrollment', document.getElementById('btnCourseEnroll')); document.getElementById('inqServiceSelect').value='${c.title}'; handleSelectChange();">Enroll</a></div>
+    </div>`).join('');
+}
+
+function loadGallery() {
+  allGallery = gData.gallery;
+  const grid = document.getElementById('galleryGrid');
+  grid.className = 'gallery-marquee';
+  grid.innerHTML = allGallery.map(g => `<img src="${g.imageUrl}" alt="${g.title}" onclick="openLightbox('${g.imageUrl}','${g.title}')"/>`).join('');
+  if (grid.children.length) { Array.from(grid.children).forEach(n => grid.appendChild(n.cloneNode(true))); startGalleryScroll(); }
+}
+
+function loadOffers() {
+  const active = gData.offers.filter(o => o.active);
+  const grid = document.getElementById('offersGrid');
+  if (!active.length) { grid.innerHTML = '<p style="color:var(--muted)">No active offers right now.</p>'; return; }
+  grid.innerHTML = active.map(o => `<div class="offer-card" style="background:${o.bgColor||'var(--rose)'}"><div class="offer-title">${o.title}</div><div class="offer-discount">${o.discount}${o.discountType==='percent'?'%':'₹'} OFF</div><p>${o.description}</p></div>`).join('');
+}
+
+function verifyCert() {
+  const id = document.getElementById('certInput').value.trim();
+  const box = document.getElementById('verifyResult');
+  const cert = gData.certificates.find(c => c.certId === id);
+  box.style.display = 'block';
+  if (cert) {
+    box.className = 'verify-result valid';
+    box.innerHTML = `<h4 style="color:#2e7d32">✅ Valid Certificate</h4><p><strong>Student:</strong> ${cert.studentName}</p><p><strong>Course:</strong> ${cert.course}</p><p><strong>Issued:</strong> ${cert.issueDate}</p>`;
+  } else {
+    box.className = 'verify-result invalid';
+    box.innerHTML = `<h4 style="color:var(--rose)">❌ Invalid Certificate</h4><p>The Certificate ID was not found.</p>`;
+  }
+}
+
+function setFormType(type, el) {
+  document.querySelectorAll('.course-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('inqType').value = type;
+  const sel = document.getElementById('inqServiceSelect');
+  const bdt = document.getElementById('bookingDateTime');
+  sel.style.display = 'block';
+  if (type === 'Book Service') {
+    bdt.style.display='flex';
+    sel.innerHTML = '<option value="">-- Choose Service --</option>' + allServicesList.map(s => `<option value="${s.name}">${s.name}</option>`).join('') + '<option value="Other">Other</option>';
+  } else if (type === 'Enrollment') {
+    bdt.style.display='none';
+    sel.innerHTML = '<option value="">-- Choose Course --</option>' + allCourses.map(c => `<option value="${c.title}">${c.title}</option>`).join('') + '<option value="Other">Other</option>';
+  } else {
+    bdt.style.display='none';
+    sel.style.display='none';
+    document.getElementById('inqService').style.display = 'block';
+  }
+  handleSelectChange();
+}
+
+function handleSelectChange() {
+  const sel = document.getElementById('inqServiceSelect');
+  if(sel.style.display !== 'none') {
+    document.getElementById('inqService').style.display = sel.value === 'Other' ? 'block' : 'none';
+  }
+}
+
+function clearForm() {
+  ['inqName','inqPhone','inqEmail','inqService','inqMsg','bkDate','bkTime'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  setFormType('Book Service', document.getElementById('btnBookService'));
+}
+
+function submitInquiry() {
+  const name = document.getElementById('inqName').value.trim(), phone = document.getElementById('inqPhone').value.trim();
+  if(!name || !phone) { showToast('Please enter name and phone'); return; }
+  const type = document.getElementById('inqType').value;
+  const sel = document.getElementById('inqServiceSelect');
+  const svc = (sel.style.display === 'none' || sel.value === 'Other') ? document.getElementById('inqService').value : sel.value;
+  const msg = encodeURIComponent(`Hello! My name is ${name}. I am interested in ${type}: ${svc}. Phone: ${phone}`);
+  window.open(`https://wa.me/${gData.siteInfo.whatsapp.replace(/\D/g,'')}?text=${msg}`, '_blank');
+}
+
+let isGalleryPaused = false;
+function startGalleryScroll() {
+  const grid = document.getElementById('galleryGrid');
+  function step() { if(!isGalleryPaused) { grid.scrollLeft += 0.5; if(grid.scrollLeft >= grid.scrollWidth/2) grid.scrollLeft = 0; } requestAnimationFrame(step); }
+  step();
+}
+function openLightbox(url, title) {
+  const lb = document.createElement('div'); lb.className='lightbox'; lb.id='lightbox';
+  lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;';
+  lb.innerHTML = `<img src="${url}" style="max-width:90%;max-height:80%;border-radius:8px"/><p style="color:#fff;margin-top:1rem">${title}</p><button onclick="document.getElementById('lightbox').remove();isGalleryPaused=false;" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer">&times;</button>`;
+  document.body.appendChild(lb); isGalleryPaused = true;
+}
+
+function toggleMenu() { document.getElementById('mobileNav').classList.toggle('open'); }
+function closeMenu() { document.getElementById('mobileNav').classList.remove('open'); }
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+document.getElementById('footerYear').textContent = new Date().getFullYear();
+loadAllData();
+</script>
+</body>
+</html>
