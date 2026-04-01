@@ -5,7 +5,7 @@
 // ─────────────────────────────────────────────────────────────
 
 const GITHUB_CONFIG = {
-    token:  localStorage.getItem('gh_token')  || '',
+    token:  localStorage.getItem('gh_token')  || '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',
     owner:  localStorage.getItem('gh_owner')  || 'yashgohel25',
     repo:   localStorage.getItem('gh_repo')   || 'nail',
     branch: localStorage.getItem('gh_branch') || 'main',
