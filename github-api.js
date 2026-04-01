@@ -5,11 +5,11 @@
 // ─────────────────────────────────────────────────────────────
 
 const GITHUB_CONFIG = {
-    token:  localStorage.getItem('gh_token')  || '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',
-    owner:  localStorage.getItem('gh_owner')  || 'yashgohel25',
-    repo:   localStorage.getItem('gh_repo')   || 'nail',
-    branch: localStorage.getItem('gh_branch') || 'main',
-    path:   'data.json'
+    token: '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',
+    owner: 'yashgohel25',
+    repo: 'nail',
+    branch: 'main',
+    path: 'data.json'
 };
 
 // ── Base fetch wrapper ────────────────────────────────────────
@@ -25,7 +25,7 @@ async function ghFetch(url, options = {}) {
     const res = await fetch(url, { ...options, headers });
     if (!res.ok) {
         let errMsg = `GitHub API Error ${res.status}`;
-        try { const e = await res.json(); errMsg = e.message || errMsg; } catch {}
+        try { const e = await res.json(); errMsg = e.message || errMsg; } catch { }
         throw new Error(errMsg);
     }
     return res.json();
@@ -77,13 +77,13 @@ const GithubStorage = {
         // Read file as base64
         const base64Content = await new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload  = () => resolve(reader.result.split(',')[1]);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = () => reject(new Error('File read failed'));
             reader.readAsDataURL(file);
         });
 
         // Build a safe, unique filename
-        const ext      = file.name.split('.').pop().toLowerCase() || 'jpg';
+        const ext = file.name.split('.').pop().toLowerCase() || 'jpg';
         const safeName = file.name
             .replace(/\.[^/.]+$/, '')          // remove extension
             .replace(/[^a-zA-Z0-9]/g, '_')    // only safe chars
@@ -91,7 +91,7 @@ const GithubStorage = {
             .substring(0, 40);
         const fileName = `${Date.now()}_${safeName}.${ext}`;
         const filePath = `${folder}/${fileName}`;
-        const url      = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${filePath}`;
+        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${filePath}`;
 
         await ghFetch(url, {
             method: 'PUT',
@@ -148,5 +148,5 @@ const GithubStorage = {
 };
 
 // Make available globally
-window.GithubStorage  = GithubStorage;
-window.GITHUB_CONFIG  = GITHUB_CONFIG;
+window.GithubStorage = GithubStorage;
+window.GITHUB_CONFIG = GITHUB_CONFIG;
