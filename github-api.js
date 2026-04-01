@@ -138,6 +138,12 @@ const GithubStorage = {
         } catch {
             return [];
         }
+    },
+
+    // Test connection to GitHub API
+    async testConnection() {
+        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}`;
+        return await ghFetch(url);
     }
 };
 
