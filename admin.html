@@ -190,7 +190,6 @@
       <div class="nav-item" onclick="showPage('bookings',this)"><i class="fas fa-calendar-check"></i> Bookings<span id="bkBadge" style="display:none;background:var(--rose);color:#fff;font-size:.65rem;padding:.1rem .4rem;border-radius:10px;margin-left:auto;font-weight:700;">0</span></div>
       <div class="nav-section">System</div>
       <div class="nav-item" onclick="showPage('imageManager',this)"><i class="fas fa-images"></i> Image Manager</div>
-      <div class="nav-item" onclick="showPage('githubSettings',this)"><i class="fab fa-github"></i> GitHub Settings</div>
     </nav>
     <div class="sidebar-footer">
       <div class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</div>
@@ -280,26 +279,6 @@
         </div>
       </div>
 
-      <!-- ─ GitHub Settings ─ -->
-      <div class="page" id="page-githubSettings">
-        <div style="background:#fff;border-radius:16px;padding:2rem;box-shadow:0 1px 4px rgba(0,0,0,.04);">
-          <h4 style="margin-bottom:1.5rem;font-size:1.1rem;">GitHub Configuration</h4>
-          <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;">Configure your GitHub repository to use it as a storage backend. Changes are saved locally in your browser.</p>
-          <div class="form-row">
-            <div class="form-group full"><label>Personal Access Token (PAT) *</label><input type="password" id="gh_token_input" placeholder="ghp_xxxxxxxxxxxx"/></div>
-            <div class="form-group"><label>Repository Owner</label><input type="text" id="gh_owner_input" placeholder="yashgohel25"/></div>
-            <div class="form-group"><label>Repository Name</label><input type="text" id="gh_repo_input" placeholder="nail"/></div>
-            <div class="form-group"><label>Branch</label><input type="text" id="gh_branch_input" placeholder="main"/></div>
-          </div>
-          <button class="btn btn-primary" onclick="saveGithubSettings()"><i class="fas fa-save"></i> Update Settings</button>
-          
-          <div style="margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);">
-             <h4 style="margin-bottom:1rem;color:var(--danger)">Danger Zone</h4>
-             <p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem;">If you updated site files directly on GitHub, you may need to force refresh the data.</p>
-             <button class="btn btn-secondary" onclick="loadAllDataFromGithub()"><i class="fas fa-sync"></i> Force Sync from GitHub</button>
-          </div>
-        </div>
-      </div>
 
       <!-- ─ Services ─ -->
       <div class="page" id="page-services">
@@ -589,20 +568,7 @@ async function saveToGithub() {
   } catch (e) { toast('Save Error: ' + e.message, 'error'); return false; }
 }
 
-function loadGithubSettings() {
-  ['token','owner','repo','branch'].forEach(k => document.getElementById(`gh_${k}_input`).value = GITHUB_CONFIG[k]);
-}
 
-function saveGithubSettings() {
-  const cfg = { token: 'gh_token_input', owner: 'gh_owner_input', repo: 'gh_repo_input', branch: 'gh_branch_input' };
-  Object.keys(cfg).forEach(k => {
-    const val = document.getElementById(cfg[k]).value.trim();
-    localStorage.setItem(`gh_${k}`, val);
-    GITHUB_CONFIG[k] = val;
-  });
-  toast('Settings Updated!', 'success');
-  loadAllDataFromGithub();
-}
 
 async function handleFileUpload(input, targetId, previewId) {
   const file = input.files[0]; if (!file) return;
@@ -615,13 +581,14 @@ async function handleFileUpload(input, targetId, previewId) {
   } catch (e) { toast('Upload Failed: ' + e.message, 'error'); }
 }
 
-function doLogin() {
+async function doLogin() {
   const u = document.getElementById('loginUser').value.trim(), p = document.getElementById('loginPass').value;
   const admin = gData ? gData.admin : { username: 'admin', password: 'janki@2024' };
   if (u === admin.username && p === admin.password) {
     localStorage.setItem('jnaToken', 'admin_token');
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
+    await loadAllDataFromGithub();
     loadDashboard();
   } else toast('Invalid credentials', 'error');
 }
@@ -634,9 +601,9 @@ async function showPage(name, el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if (document.getElementById('page-' + name)) document.getElementById('page-' + name).classList.add('active');
   if (el) el.classList.add('active');
-  const titles = {dashboard:'Dashboard',siteInfo:'Site Info',services:'Services',courses:'Courses',gallery:'Gallery',offers:'Offers',inquiries:'Inquiries',students:'Students',certificates:'Certs',bookings:'Bookings',imageManager:'Image Manager',githubSettings:'GitHub'};
+  const titles = {dashboard:'Dashboard',siteInfo:'Site Info',services:'Services',courses:'Courses',gallery:'Gallery',offers:'Offers',inquiries:'Inquiries',students:'Students',certificates:'Certs',bookings:'Bookings',imageManager:'Image Manager'};
   document.getElementById('pageTitle').textContent = titles[name] || name;
-  const map = {siteInfo:loadSiteInfoForm,services:loadServicesTable,courses:loadCoursesTable,gallery:loadGalleryAdmin,offers:loadOffersTable,inquiries:loadInquiriesTable,students:loadStudentsTable,certificates:loadCertTable,bookings:loadBookingsTable,imageManager:loadImageManager,githubSettings:loadGithubSettings,dashboard:loadDashboard};
+  const map = {siteInfo:loadSiteInfoForm,services:loadServicesTable,courses:loadCoursesTable,gallery:loadGalleryAdmin,offers:loadOffersTable,inquiries:loadInquiriesTable,students:loadStudentsTable,certificates:loadCertTable,bookings:loadBookingsTable,imageManager:loadImageManager,dashboard:loadDashboard};
   if (map[name]) map[name]();
   if (window.innerWidth <= 768) toggleSidebar();
 }
@@ -776,13 +743,6 @@ function previewImg(inpId, preId) { const url = document.getElementById(inpId).v
 function toast(msg, type='success') { const t = document.getElementById('adminToast'); t.textContent = msg; t.className = 'show ' + type; setTimeout(() => t.className = '', 3000); }
 function filterTable(inId, tbId) { const q = document.getElementById(inId).value.toLowerCase(); document.querySelectorAll(`#${tbId} tr`).forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); }
 
-(async () => {
-  if (localStorage.getItem('jnaToken')) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    await loadAllDataFromGithub(); loadDashboard();
-  }
-
 // ─── Image Manager ───────────────────────────────────────────
 async function loadImageManager() {
   const grid = document.getElementById('imageManagerGrid');
@@ -791,44 +751,47 @@ async function loadImageManager() {
     grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-key" style="font-size:2rem;color:var(--gold);"></i><p style="margin-top:1rem;">Please configure your GitHub Token in <strong>GitHub Settings</strong> first.</p></div>';
     return;
   }
-  const images = await GithubStorage.listImages('images');
-  if (!images.length) {
-    grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-image" style="font-size:2rem;"></i><p style="margin-top:1rem;">No images yet. Upload your first image!</p></div>';
-    return;
-  }
-  grid.innerHTML = images.map(img => `
-    <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative;" 
-         onclick="copyImageUrl('${img.url}', this)" title="Click to copy URL">
-      <img src="${img.url}" alt="${img.name}" loading="lazy"
-           style="width:100%;height:130px;object-fit:cover;display:block;"
-           onerror="this.src='https://via.placeholder.com/160x130?text=Loading...'"/>
-      <div style="padding:.5rem .6rem;background:#fff;">
-        <p style="font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${img.name}">${img.name}</p>
-        <div style="display:flex;gap:.3rem;margin-top:.3rem;">
-          <button onclick="event.stopPropagation();copyImageUrl('${img.url}',this.closest('div').parentElement)" 
-                  style="flex:1;font-size:.65rem;padding:.2rem .4rem;background:var(--rose);color:#fff;border:none;border-radius:4px;cursor:pointer;">
-            <i class="fas fa-copy"></i> Copy URL
-          </button>
-          <button onclick="event.stopPropagation();deleteImageFromGithub('${img.path}','${img.sha}',this.closest('div').parentElement.parentElement)"
-                  style="font-size:.65rem;padding:.2rem .4rem;background:#fee2e2;color:#dc2626;border:none;border-radius:4px;cursor:pointer;">
-            <i class="fas fa-trash"></i>
-          </button>
+  try {
+    const images = await GithubStorage.listImages('images');
+    if (!images.length) {
+      grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-image" style="font-size:2rem;"></i><p style="margin-top:1rem;">No images yet. Upload your first image!</p></div>';
+      return;
+    }
+    grid.innerHTML = images.map(img => `
+      <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative;" 
+           onclick="copyImageUrl('${img.url}', this)" title="Click to copy URL">
+        <img src="${img.url}" alt="${img.name}" loading="lazy"
+             style="width:100%;height:130px;object-fit:cover;display:block;"
+             onerror="this.src='https://via.placeholder.com/160x130?text=Loading...'"/>
+        <div style="padding:.5rem .6rem;background:#fff;">
+          <p style="font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${img.name}">${img.name}</p>
+          <div style="display:flex;gap:.3rem;margin-top:.3rem;">
+            <button onclick="event.stopPropagation();copyImageUrl('${img.url}',this.closest('div').parentElement)" 
+                    style="flex:1;font-size:.65rem;padding:.2rem .4rem;background:var(--rose);color:#fff;border:none;border-radius:4px;cursor:pointer;">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+            <button onclick="event.stopPropagation();deleteImageFromGithub('${img.path}','${img.sha}',this.closest('div').parentElement.parentElement)"
+                    style="font-size:.65rem;padding:.2rem .4rem;background:#fee2e2;color:#dc2626;border:none;border-radius:4px;cursor:pointer;">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
+  } catch (e) {
+    grid.innerHTML = `<div style="text-align:center;color:var(--danger);padding:3rem;grid-column:1/-1;"><p>Error: ${e.message}</p></div>`;
+  }
 }
 
 function copyImageUrl(url, el) {
   navigator.clipboard.writeText(url).then(() => {
-    toast('URL Copied! ' + url.split('/').pop(), 'success');
+    toast('URL Copied!', 'success');
     if (el) {
       const orig = el.style.outline;
       el.style.outline = '2px solid var(--rose)';
       setTimeout(() => el.style.outline = orig, 1200);
     }
   }).catch(() => {
-    // fallback
     const t = document.createElement('textarea');
     t.value = url; document.body.appendChild(t); t.select();
     document.execCommand('copy'); document.body.removeChild(t);
@@ -857,24 +820,22 @@ async function uploadImagesToGithub(input) {
   prog.style.display = 'none';
   input.value = '';
   status.textContent = `Done! ${done}/${files.length} uploaded.`;
-  // Reload grid
   await loadImageManager();
 }
 
 async function deleteImageFromGithub(filePath, sha, el) {
-  if (!confirm('Delete this image from GitHub? This cannot be undone.')) return;
+  if (!confirm('Delete this image?')) return;
   try {
     toast('Deleting...', 'info');
-    // Need fresh SHA in case it changed
     await GithubStorage.deleteImage(filePath);
     el.remove();
-    toast('Image deleted!', 'success');
+    toast('Deleted!', 'success');
   } catch(e) {
     toast('Delete failed: ' + e.message, 'error');
   }
 }
 
-})();
+
 </script>
 </body>
 </html>
