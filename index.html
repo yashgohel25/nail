@@ -353,7 +353,17 @@
           <label>Message</label>
           <textarea class="form-control" id="inqMsg" rows="3" placeholder="Tell us what you need..."></textarea>
         </div>
-        <button class="btn-rose" style="width:100%;padding:1rem;" onclick="submitInquiry()">Send Inquiry</button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;">
+          <button class="btn-rose" style="padding:1rem;" onclick="submitDirect()">
+            <i class="fas fa-paper-plane" style="margin-right:.4rem;"></i>Send Inquiry
+          </button>
+          <button onclick="submitWhatsApp()" style="background:#25D366;color:#fff;padding:1rem;border:none;border-radius:50px;font-weight:600;cursor:pointer;font-size:.9rem;font-family:inherit;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:.4rem;">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </button>
+        </div>
+        <p style="text-align:center;font-size:.78rem;color:var(--muted);margin-top:.6rem;">
+          <i class="fas fa-info-circle"></i> "Send Inquiry" saves your request. "WhatsApp" opens chat directly.
+        </p>
       </div>
     </div>
   </div>
@@ -417,6 +427,7 @@
 <a href="#" class="wa-float" id="waFloat" target="_blank"><i class="fab fa-whatsapp"></i></a>
 <div id="toast"></div>
 
+<script src="github-api.js"></script>
 <script>
 let gData = null, allServicesList = [], allCourses = [], allGallery = [];
 
@@ -534,15 +545,62 @@ function clearForm() {
   setFormType('Book Service', document.getElementById('btnBookService'));
 }
 
-function submitInquiry() {
-  const name = document.getElementById('inqName').value.trim(), phone = document.getElementById('inqPhone').value.trim();
-  if(!name || !phone) { showToast('Please enter name and phone'); return; }
+function getFormData() {
+  const name = document.getElementById('inqName').value.trim();
+  const phone = document.getElementById('inqPhone').value.trim();
+  if(!name || !phone) { showToast('Please enter your name and phone number'); return null; }
   const type = document.getElementById('inqType').value;
   const sel = document.getElementById('inqServiceSelect');
   const svc = (sel.style.display === 'none' || sel.value === 'Other') ? document.getElementById('inqService').value : sel.value;
-  const msg = encodeURIComponent(`Hello! My name is ${name}. I am interested in ${type}: ${svc}. Phone: ${phone}`);
+  const email = document.getElementById('inqEmail').value.trim();
+  const msg = document.getElementById('inqMsg').value.trim();
+  const date = document.getElementById('bkDate').value;
+  const time = document.getElementById('bkTime').value;
+  return { name, phone, email, type, service: svc, message: msg, date, time };
+}
+
+async function submitDirect() {
+  const data = getFormData(); if (!data) return;
+  try {
+    // Save inquiry to GitHub via GithubStorage
+    const script = document.createElement('script');
+    // Use inline approach — load github-api.js if not already loaded
+    if (typeof GithubStorage === 'undefined') {
+      showToast('Loading... please try again in a moment.');
+      const s = document.createElement('script');
+      s.src = 'github-api.js';
+      s.onload = () => submitDirect();
+      document.head.appendChild(s);
+      return;
+    }
+    const { json, sha } = await GithubStorage.getData();
+    const inquiry = {
+      id: 'inq_' + Date.now() + '_' + Math.random().toString(36).substr(2,6),
+      name: data.name, phone: data.phone, email: data.email,
+      service: data.service, type: data.type,
+      message: data.message, date: data.date, time: data.time,
+      submittedAt: new Date().toISOString(),
+      status: 'new'
+    };
+    json.inquiries = json.inquiries || [];
+    json.inquiries.push(inquiry);
+    await GithubStorage.saveData(json, sha);
+    showToast('✅ Inquiry sent! We will contact you soon.');
+    clearForm();
+  } catch(e) {
+    showToast('❌ Failed to send. Try WhatsApp instead.');
+    console.error(e);
+  }
+}
+
+function submitWhatsApp() {
+  const data = getFormData(); if (!data) return;
+  const msg = encodeURIComponent(`Hello! My name is ${data.name}.\nI am interested in ${data.type}: ${data.service}.\nPhone: ${data.phone}${data.message ? '\nMessage: ' + data.message : ''}`);
   window.open(`https://wa.me/${gData.siteInfo.whatsapp.replace(/\D/g,'')}?text=${msg}`, '_blank');
 }
+
+// Keep old name for backward compat
+function submitInquiry() { submitDirect(); }
 
 let isGalleryPaused = false;
 function startGalleryScroll() {
