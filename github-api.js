@@ -7,10 +7,10 @@
 // ─────────────────────────────────────────────────────────────
 
 const GITHUB_CONFIG = {
-    // ⚠️  REPLACE THIS WITH YOUR NEW TOKEN  ⚠️
-    // Generate at: https://github.com/settings/tokens/new
-    // Select scopes: repo (full) → Generate → Paste below
-    token: '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',
+    // ⚠️ HARDCODING YOUR TOKEN HERE WILL CAUSE GITHUB TO REVOKE IT! ⚠️
+    // Instead, leave this blank. The admin panel will prompt you to enter
+    // your token and and it will be saved safely in your browser locally.
+    token: localStorage.getItem('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') || '',
     owner: 'yashgohel25',
     repo: 'nail',
     branch: 'main',
@@ -18,16 +18,41 @@ const GITHUB_CONFIG = {
 };
 
 // ── Base fetch wrapper ────────────────────────────────────────
-async function ghFetch(url, options = {}) {
+async function ghFetch(url, options = {}, isRetry = false) {
     const headers = {
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json',
         ...options.headers
     };
-    if (GITHUB_CONFIG.token && GITHUB_CONFIG.token !== 'PASTE_YOUR_GITHUB_TOKEN_HERE') {
-        headers['Authorization'] = `token ${GITHUB_CONFIG.token}`;
+
+    let token = localStorage.getItem('gh_admin_token') || GITHUB_CONFIG.token;
+    
+    // If we are doing a PUT/DELETE/POST but don't have a token, ask for it
+    if ((!token || token.length < 10) && options.method && options.method !== 'GET') {
+        token = prompt("GitHub Token is required to save changes.\n\nPlease enter your GitHub Personal Access Token:");
+        if (token) {
+            localStorage.setItem('gh_admin_token', token);
+            GITHUB_CONFIG.token = token;
+        }
     }
+
+    if (token && token.length > 10) {
+        headers['Authorization'] = `token ${token}`;
+    }
+    
     const res = await fetch(url, { ...options, headers });
+    
+    // Handle Token Expiration or Invalid Token
+    if (res.status === 401 && !isRetry && options.method && options.method !== 'GET') {
+        const newToken = prompt("Your GitHub Token is invalid, expired, or was revoked.\n\nPlease generate a new one and paste it here:");
+        if (newToken) {
+            localStorage.setItem('gh_admin_token', newToken);
+            GITHUB_CONFIG.token = newToken;
+            headers['Authorization'] = `token ${newToken}`;
+            return await ghFetch(url, options, true); // Retry the request once
+        }
+    }
+
     if (!res.ok) {
         let errMsg = `GitHub API Error ${res.status}`;
         try { const e = await res.json(); errMsg = e.message || errMsg; } catch { }
@@ -41,9 +66,10 @@ const GithubStorage = {
 
     // Check if token is configured
     hasToken() {
-        return GITHUB_CONFIG.token &&
-            GITHUB_CONFIG.token !== 'PASTE_YOUR_GITHUB_TOKEN_HERE' &&
-            GITHUB_CONFIG.token.length > 10;
+        // Now mostly handled by ghFetch prompt, but we still return true
+        // so the UI buttons remain enabled.
+        const token = localStorage.getItem('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') || GITHUB_CONFIG.token;
+        return token && token.length > 10;
     },
 
     // Read data.json from GitHub (returns { json, sha })
@@ -66,7 +92,6 @@ const GithubStorage = {
 
     // Write data.json to GitHub
     async saveData(newData, sha) {
-        if (!this.hasToken()) throw new Error('GitHub Token not configured in github-api.js');
         const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
         const body = {
@@ -84,8 +109,6 @@ const GithubStorage = {
 
     // Upload an image file → saves to images/ folder in repo → returns CDN URL
     async uploadImage(file, folder = 'images') {
-        if (!this.hasToken()) throw new Error('GitHub Token not configured in github-api.js');
-
         const base64Content = await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => resolve(reader.result.split(',')[1]);
@@ -117,7 +140,6 @@ const GithubStorage = {
 
     // Delete an image from the repo
     async deleteImage(filePath) {
-        if (!this.hasToken()) throw new Error('GitHub Token not configured.');
         const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${filePath}`;
         const fileInfo = await ghFetch(url + `?ref=${GITHUB_CONFIG.branch}`);
         await ghFetch(url, {
