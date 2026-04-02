@@ -5,7 +5,7 @@
 // ─────────────────────────────────────────────────────────────
 
 const GITHUB_CONFIG = {
-    token: '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',
+    token: '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',
     owner: 'yashgohel25',
     repo: 'nail',
     branch: 'main',
