@@ -25,7 +25,7 @@ async function ghFetch(url, options = {}, isRetry = false) {
         ...options.headers
     };
 
-    let token = localStorage.getItem('gh_admin_token') || GITHUB_CONFIG.token;
+    let token = localStorage.getItem('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') || GITHUB_CONFIG.token;
     
     // If we are doing a PUT/DELETE/POST but don't have a token, ask for it
     if ((!token || token.length < 10) && options.method && options.method !== 'GET') {
