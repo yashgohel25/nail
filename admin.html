@@ -7,18 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <style>
-    :root{
-      --rose:#c8365a;--rose-dark:#9b1f3e;--rose-light:#fde8ee;
-      --gold:#c9a96e;--ink:#1a0a10;--muted:#6b7280;
-      --bg:#f8f9fc;--white:#ffffff;
-      --border:#e5e7eb;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;
-      --sidebar-w:260px;
-    }
+    :root{--rose:#c8365a;--rose-dark:#9b1f3e;--rose-light:#fde8ee;--gold:#c9a96e;--ink:#1a0a10;--muted:#6b7280;--bg:#f8f9fc;--white:#ffffff;--border:#e5e7eb;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;--sidebar-w:260px;}
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--ink);}
     input,select,textarea,button{font-family:inherit;}
-
-    /* ─ Login ─ */
     #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--rose-dark),var(--rose));display:flex;align-items:center;justify-content:center;z-index:9999;}
     .login-box{background:#fff;border-radius:24px;padding:3rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2);}
     .login-logo{text-align:center;margin-bottom:2rem;}
@@ -30,8 +22,6 @@
     .btn-login{width:100%;padding:.9rem;background:var(--rose);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;}
     .btn-login:hover{background:var(--rose-dark);}
     .login-error{color:var(--danger);font-size:.85rem;text-align:center;margin-top:.5rem;display:none;}
-
-    /* ─ App Shell ─ */
     #app{display:none;}
     .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--ink);display:flex;flex-direction:column;z-index:100;transition:transform .3s;}
     .sidebar-logo{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,.08);}
@@ -39,100 +29,103 @@
     .sidebar-logo span{color:var(--rose);font-size:.75rem;font-weight:500;display:block;margin-top:.1rem;letter-spacing:.08em;text-transform:uppercase;}
     .sidebar-nav{flex:1;overflow-y:auto;padding:1rem 0;}
     .nav-section{padding:.4rem 1rem .2rem;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.12em;}
-    .nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.2rem;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-radius:0;margin:1px 0;font-size:.9rem;}
+    .nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.2rem;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;margin:1px 0;font-size:.9rem;}
     .nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
     .nav-item.active{background:var(--rose);color:#fff;}
     .nav-item i{width:18px;text-align:center;font-size:.9rem;}
     .sidebar-footer{padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,.08);}
     .logout-btn{display:flex;align-items:center;gap:.6rem;color:rgba(255,255,255,.5);cursor:pointer;font-size:.85rem;transition:color .2s;}
     .logout-btn:hover{color:#fff;}
-
-    /* ─ Main ─ */
     .main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
     .topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-    .topbar h3{font-size:1.1rem;font-weight:700;color:var(--ink);}
+    .topbar h3{font-size:1.1rem;font-weight:700;}
     .topbar-right{display:flex;align-items:center;gap:1rem;}
     .topbar-badge{background:var(--rose-light);color:var(--rose);font-size:.8rem;font-weight:600;padding:.3rem .8rem;border-radius:50px;}
     .content{padding:2rem;flex:1;}
-
-    /* ─ Cards ─ */
-    .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;margin-bottom:2rem;}
-    .stat-card{background:#fff;border-radius:16px;padding:1.4rem;display:flex;align-items:center;gap:1rem;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:1.2rem;margin-bottom:2rem;}
+    .stat-card{background:#fff;border-radius:16px;padding:1.4rem;display:flex;align-items:center;gap:1rem;box-shadow:0 1px 4px rgba(0,0,0,.04);border-left:4px solid transparent;transition:transform .2s;}
+    .stat-card:hover{transform:translateY(-2px);}
     .stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
     .stat-info .num{font-size:1.8rem;font-weight:800;line-height:1;}
     .stat-info .lbl{font-size:.78rem;color:var(--muted);margin-top:.2rem;}
-
-    /* ─ Table ─ */
     .table-wrap{background:#fff;border-radius:16px;overflow-x:auto;box-shadow:0 1px 4px rgba(0,0,0,.04);}
     .table-head{padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.8rem;}
     .table-head h4{font-size:1rem;font-weight:700;}
     table{width:100%;border-collapse:collapse;}
     th{padding:.8rem 1.2rem;background:#f9fafb;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;}
-    td{padding:.9rem 1.2rem;border-top:1px solid var(--border);font-size:.88rem;vertical-align:middle;}
+    td{padding:.85rem 1.2rem;border-top:1px solid var(--border);font-size:.88rem;vertical-align:middle;}
     tr:hover td{background:#fafafa;}
-    .badge{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.72rem;font-weight:700;}
+    .badge{display:inline-block;padding:.25rem .75rem;border-radius:50px;font-size:.72rem;font-weight:700;}
     .badge-success{background:#dcfce7;color:#166534;}
     .badge-warning{background:#fef3c7;color:#92400e;}
     .badge-danger{background:#fee2e2;color:#991b1b;}
     .badge-info{background:#dbeafe;color:#1e40af;}
     .badge-purple{background:#ede9fe;color:#5b21b6;}
-
-    /* ─ Buttons ─ */
-    .btn{padding:.55rem 1.2rem;border-radius:8px;font-weight:600;font-size:.82rem;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;}
+    .badge-inactive{background:#f3f4f6;color:#6b7280;}
+    .btn{padding:.5rem 1.1rem;border-radius:8px;font-weight:600;font-size:.82rem;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:.4rem;}
+    .btn:hover{opacity:.9;transform:translateY(-1px);}
     .btn-primary{background:var(--rose);color:#fff;}
     .btn-primary:hover{background:var(--rose-dark);}
     .btn-secondary{background:var(--bg);color:var(--ink);border:1px solid var(--border);}
     .btn-secondary:hover{background:var(--border);}
     .btn-success{background:#22c55e;color:#fff;}
-    .btn-success:hover{background:#16a34a;}
     .btn-danger{background:#ef4444;color:#fff;}
-    .btn-danger:hover{background:#dc2626;}
+    .btn-info{background:#3b82f6;color:#fff;}
     .btn-warning{background:#f59e0b;color:#fff;}
-    .btn-warning:hover{background:#d97706;}
-    .btn-sm{padding:.35rem .8rem;font-size:.78rem;}
-
-    /* ─ Search ─ */
+    .btn-sm{padding:.3rem .7rem;font-size:.75rem;border-radius:6px;}
+    .btn-icon{width:30px;height:30px;padding:0;justify-content:center;border-radius:6px;}
+    .action-btns{display:flex;gap:.35rem;align-items:center;}
     .search-box{display:flex;align-items:center;gap:.5rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.4rem .8rem;}
     .search-box input{border:none;background:none;outline:none;font-size:.85rem;width:180px;}
     .search-box i{color:var(--muted);}
-
-    /* ─ Modal ─ */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem;}
     .modal-overlay.open{display:flex;}
-    .modal{background:#fff;border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+    .modal{background:#fff;border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);}
     .modal-header{padding:1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;}
     .modal-header h4{font-size:1.1rem;font-weight:700;}
     .modal-body{padding:1.5rem;}
     .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.8rem;}
-    .close-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--muted);padding:.2rem;}
-
-    /* ─ Form ─ */
+    .close-btn{background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:all .2s;}
+    .close-btn:hover{background:var(--bg);color:var(--ink);}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
     .form-group{margin-bottom:1rem;}
-    .form-group label{display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;color:var(--ink);}
+    .form-group label{display:block;font-size:.82rem;font-weight:600;margin-bottom:.4rem;}
     .form-group input,.form-group select,.form-group textarea{width:100%;padding:.7rem .9rem;border:2px solid var(--border);border-radius:8px;font-size:.88rem;outline:none;transition:all .2s;}
     .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--rose);}
     .form-group textarea{resize:vertical;min-height:80px;}
     .full{grid-column:1/-1;}
-
-    /* ─ Pages ─ */
     .page{display:none;}
     .page.active{display:block;}
-
-    /* ─ Toast ─ */
-    #adminToast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:.8rem 1.5rem;border-radius:10px;z-index:9999;opacity:0;transition:opacity .3s;font-size:.9rem;max-width:320px;}
+    #adminToast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:.8rem 1.5rem;border-radius:10px;z-index:9999;opacity:0;transition:opacity .3s;font-size:.9rem;max-width:320px;display:flex;align-items:center;gap:.6rem;}
     #adminToast.show{opacity:1;}
     #adminToast.success{background:#166534;}
     #adminToast.error{background:#991b1b;}
-
-    /* ─ Cert card ─ */
+    #adminToast.info{background:#1e40af;}
+    .gal-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07);transition:all .2s;border:1px solid var(--border);}
+    .gal-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.12);}
+    .gal-card img{width:100%;height:150px;object-fit:cover;display:block;}
+    .gal-card-body{padding:.75rem;}
+    .gal-card-title{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.3rem;}
+    .gal-card-cat{font-size:.72rem;color:var(--muted);}
+    .gal-card-actions{display:flex;gap:.4rem;margin-top:.6rem;}
+    .gal-card-actions .btn{flex:1;justify-content:center;}
     .cert-card{background:linear-gradient(135deg,var(--rose-dark),var(--rose));color:#fff;border-radius:16px;padding:1.5rem;margin-top:1rem;}
-    .cert-card h4{font-size:1.1rem;margin-bottom:.5rem;}
-    .cert-id{font-size:1.8rem;font-weight:800;letter-spacing:.05em;font-family:monospace;}
-
-    /* ─ Image preview ─ */
+    .cert-card h4{font-size:1rem;margin-bottom:.5rem;}
+    .cert-id{font-size:1.6rem;font-weight:800;letter-spacing:.05em;font-family:monospace;}
     .img-preview{width:100%;height:140px;object-fit:cover;border-radius:8px;margin-top:.5rem;display:none;border:2px solid var(--border);}
-
+    .empty-cell{text-align:center;padding:2rem;color:var(--muted);font-size:.9rem;}
+    .dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+    .sync-bar{display:flex;align-items:center;gap:.8rem;background:#fff;border-radius:12px;padding:.8rem 1.2rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.04);font-size:.85rem;}
+    .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;transition:background .3s;}
+    @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+    .sync-dot.syncing{animation:blink .6s infinite;background:var(--warning);}
+    .img-mgr-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff;transition:all .2s;}
+    .img-mgr-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.1);transform:translateY(-2px);}
+    .img-mgr-card img{width:100%;height:120px;object-fit:cover;display:block;}
+    .img-mgr-footer{padding:.5rem .6rem;}
+    .img-mgr-footer p{font-size:.7rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:.3rem;}
+    .img-mgr-footer .btns{display:flex;gap:.3rem;}
+    .img-mgr-footer .btns button{flex:1;padding:.25rem .4rem;font-size:.65rem;font-weight:600;border:none;border-radius:4px;cursor:pointer;}
     @media(max-width:768px){
       .sidebar{transform:translateX(-100%);}
       .sidebar.open{transform:translateX(0);}
@@ -140,6 +133,7 @@
       .form-row{grid-template-columns:1fr;}
       #menuToggle{display:block !important;}
       .close-sidebar-btn{display:block !important;}
+      .dash-bottom{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -156,21 +150,17 @@
     <input type="text" id="loginUser" placeholder="admin" onkeypress="if(event.key==='Enter')doLogin()"/>
     <label>Password</label>
     <input type="password" id="loginPass" placeholder="••••••••" onkeypress="if(event.key==='Enter')doLogin()"/>
-    <button class="btn-login" onclick="doLogin()">Login</button>
-    <p class="login-error" id="loginErr">Invalid username or password</p>
+    <button class="btn-login" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+    <p class="login-error" id="loginErr">❌ Invalid username or password</p>
   </div>
 </div>
 
 <!-- App -->
 <div id="app">
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div>
-          <h2>🌸 Janki Nail Art</h2>
-          <span>Admin Panel</span>
-        </div>
+        <div><h2>🌸 Janki Nail Art</h2><span>Admin Panel</span></div>
         <button onclick="toggleSidebar()" class="close-sidebar-btn" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:1.4rem;cursor:pointer;display:none;padding:0;"><i class="fas fa-times"></i></button>
       </div>
     </div>
@@ -182,21 +172,20 @@
       <div class="nav-item" onclick="showPage('services',this)"><i class="fas fa-spa"></i> Services</div>
       <div class="nav-item" onclick="showPage('courses',this)"><i class="fas fa-graduation-cap"></i> Courses</div>
       <div class="nav-item" onclick="showPage('gallery',this)"><i class="fas fa-images"></i> Gallery</div>
-      <div class="nav-item" onclick="showPage('offers',this)"><i class="fas fa-tag"></i> Offers & Discounts</div>
-      <div class="nav-section">Students & Clients</div>
-      <div class="nav-item" onclick="showPage('inquiries',this)"><i class="fas fa-envelope"></i> Inquiries<span id="inqBadge" style="display:none;background:var(--rose);color:#fff;font-size:.65rem;padding:.1rem .4rem;border-radius:10px;margin-left:auto;font-weight:700;">0</span></div>
+      <div class="nav-item" onclick="showPage('offers',this)"><i class="fas fa-tag"></i> Offers &amp; Discounts</div>
+      <div class="nav-section">Students &amp; Clients</div>
+      <div class="nav-item" onclick="showPage('inquiries',this)"><i class="fas fa-envelope"></i> Inquiries <span id="inqBadge" style="display:none;background:var(--rose);color:#fff;font-size:.65rem;padding:.1rem .4rem;border-radius:10px;margin-left:auto;font-weight:700;"></span></div>
       <div class="nav-item" onclick="showPage('students',this)"><i class="fas fa-user-graduate"></i> Students</div>
       <div class="nav-item" onclick="showPage('certificates',this)"><i class="fas fa-certificate"></i> Certificates</div>
-      <div class="nav-item" onclick="showPage('bookings',this)"><i class="fas fa-calendar-check"></i> Bookings<span id="bkBadge" style="display:none;background:var(--rose);color:#fff;font-size:.65rem;padding:.1rem .4rem;border-radius:10px;margin-left:auto;font-weight:700;">0</span></div>
+      <div class="nav-item" onclick="showPage('bookings',this)"><i class="fas fa-calendar-check"></i> Bookings <span id="bkBadge" style="display:none;background:var(--rose);color:#fff;font-size:.65rem;padding:.1rem .4rem;border-radius:10px;margin-left:auto;font-weight:700;"></span></div>
       <div class="nav-section">System</div>
-      <div class="nav-item" onclick="showPage('imageManager',this)"><i class="fas fa-images"></i> Image Manager</div>
+      <div class="nav-item" onclick="showPage('imageManager',this)"><i class="fas fa-photo-video"></i> Image Manager</div>
     </nav>
     <div class="sidebar-footer">
       <div class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</div>
     </div>
   </aside>
 
-  <!-- Main -->
   <div class="main">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:1rem;">
@@ -204,132 +193,132 @@
         <h3 id="pageTitle">Dashboard</h3>
       </div>
       <div class="topbar-right">
-        <span class="topbar-badge" id="adminBadge">Admin</span>
+        <button class="btn btn-secondary btn-sm" onclick="syncData()"><i class="fas fa-sync-alt" id="syncIcon"></i> Sync</button>
+        <span class="topbar-badge">🌸 Admin</span>
         <a href="/" target="_blank" style="font-size:.82rem;color:var(--rose);text-decoration:none;font-weight:600;"><i class="fas fa-external-link-alt"></i> View Site</a>
       </div>
     </div>
     <div class="content">
 
-      <!-- ─ Dashboard ─ -->
+      <!-- Dashboard -->
       <div class="page active" id="page-dashboard">
+        <div class="sync-bar">
+          <div class="sync-dot" id="syncDot"></div>
+          <span id="syncStatus">Loading...</span>
+          <span style="margin-left:auto;font-size:.78rem;color:var(--muted);" id="lastSync"></span>
+        </div>
         <div class="stat-grid" id="statsGrid"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;" class="dash-bottom">
+        <div class="dash-bottom">
           <div class="table-wrap">
             <div class="table-head"><h4>Recent Inquiries</h4></div>
-            <table><thead><tr><th>Name</th><th>Phone</th><th>Status</th></tr></thead>
-            <tbody id="dashInquiries"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:1.5rem;">Loading...</td></tr></tbody></table>
+            <table><thead><tr><th>Name</th><th>Phone</th><th>Status</th></tr></thead><tbody id="dashInquiries"></tbody></table>
           </div>
           <div class="table-wrap">
             <div class="table-head"><h4>Recent Students</h4></div>
-            <table><thead><tr><th>Name</th><th>Course</th><th>Status</th></tr></thead>
-            <tbody id="dashStudents"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:1.5rem;">Loading...</td></tr></tbody></table>
+            <table><thead><tr><th>Name</th><th>Course</th><th>Status</th></tr></thead><tbody id="dashStudents"></tbody></table>
           </div>
         </div>
       </div>
 
-      <!-- ─ Site Info ─ -->
+      <!-- Site Info -->
       <div class="page" id="page-siteInfo">
         <div style="background:#fff;border-radius:16px;padding:2rem;box-shadow:0 1px 4px rgba(0,0,0,.04);">
-          <h4 style="margin-bottom:1.5rem;font-size:1.1rem;">Basic Site Information</h4>
+          <h4 style="margin-bottom:1.5rem;font-size:1.1rem;"><i class="fas fa-cog" style="color:var(--rose);margin-right:.5rem;"></i>Basic Site Information</h4>
           <div class="form-row">
             <div class="form-group"><label>Studio Name</label><input type="text" id="si_name"/></div>
             <div class="form-group"><label>Tagline</label><input type="text" id="si_tagline"/></div>
             <div class="form-group"><label>Phone</label><input type="text" id="si_phone"/></div>
-            <div class="form-group"><label>WhatsApp Number (with country code)</label><input type="text" id="si_whatsapp"/></div>
+            <div class="form-group"><label>WhatsApp (with country code)</label><input type="text" id="si_whatsapp"/></div>
             <div class="form-group"><label>Email</label><input type="email" id="si_email"/></div>
             <div class="form-group"><label>Address</label><input type="text" id="si_address"/></div>
             <div class="form-group"><label>Open Hours</label><input type="text" id="si_openHours"/></div>
             <div class="form-group"><label>Instagram URL</label><input type="text" id="si_instagram"/></div>
             <div class="form-group full"><label>Description</label><textarea id="si_description" rows="3"></textarea></div>
             <div class="form-group full"><label>Hero Image URL</label>
-            <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
-              <input type="text" id="si_heroImage" oninput="previewImg('si_heroImage','si_heroPreview')" style="flex:1" placeholder="https://... or upload below"/>
-              <button class="btn btn-secondary btn-sm" onclick="document.getElementById('si_heroFile').click()"><i class="fas fa-upload"></i></button>
-              <input type="file" id="si_heroFile" accept="image/*" style="display:none" onchange="handleFileUpload(this,'si_heroImage','si_heroPreview')"/>
+              <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
+                <input type="text" id="si_heroImage" oninput="previewImg('si_heroImage','si_heroPreview')" style="flex:1" placeholder="https://..."/>
+                <button class="btn btn-secondary btn-sm" onclick="document.getElementById('si_heroFile').click()"><i class="fas fa-upload"></i> Upload</button>
+                <input type="file" id="si_heroFile" accept="image/*" style="display:none" onchange="handleFileUpload(this,'si_heroImage','si_heroPreview')"/>
+              </div>
+              <img class="img-preview" id="si_heroPreview"/>
             </div>
-            <img class="img-preview" id="si_heroPreview"/></div>
           </div>
           <button class="btn btn-primary" onclick="saveSiteInfo()"><i class="fas fa-save"></i> Save Changes</button>
         </div>
       </div>
 
-      <!-- ─ Image Manager ─ -->
+      <!-- Image Manager -->
       <div class="page" id="page-imageManager">
         <div style="background:#fff;border-radius:16px;padding:2rem;box-shadow:0 1px 4px rgba(0,0,0,.04);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
-            <h4 style="font-size:1.1rem;">Image Manager</h4>
-            <div style="display:flex;gap:.8rem;align-items:center;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+            <h4 style="font-size:1.1rem;"><i class="fas fa-photo-video" style="color:var(--rose);margin-right:.5rem;"></i>Image Manager</h4>
+            <div style="display:flex;gap:.8rem;">
               <label style="display:flex;align-items:center;gap:.5rem;background:var(--rose);color:#fff;padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600;">
-                <i class="fas fa-upload"></i> Upload Image
+                <i class="fas fa-upload"></i> Upload
                 <input type="file" id="im_fileInput" accept="image/*" multiple style="display:none" onchange="uploadImagesToGithub(this)">
               </label>
               <button class="btn btn-secondary" onclick="loadImageManager()"><i class="fas fa-sync"></i> Refresh</button>
             </div>
           </div>
-          <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.5rem;">Images are stored in the <code>images/</code> folder of your GitHub repo and served via jsDelivr CDN. Click any image to copy its URL.</p>
-          <div id="imageManagerGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;">
-            <div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;">Loading images...</div>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:1.5rem;">Stored in <code>images/</code> folder on GitHub, served via jsDelivr CDN. Click any image to copy its URL.</p>
+          <div id="imageUploadProgress" style="display:none;margin-bottom:1rem;background:var(--rose-light);border-radius:8px;padding:.8rem 1rem;">
+            <i class="fas fa-spinner fa-spin" style="color:var(--rose);margin-right:.5rem;"></i>
+            <span id="imageUploadStatus" style="font-size:.85rem;">Uploading...</span>
           </div>
-          <div id="imageUploadProgress" style="display:none;margin-top:1rem;background:var(--blush);border-radius:8px;padding:1rem;">
-            <div style="display:flex;align-items:center;gap:.8rem;">
-              <i class="fas fa-spinner fa-spin" style="color:var(--rose)"></i>
-              <span id="imageUploadStatus" style="font-size:.85rem;color:var(--muted);">Uploading...</span>
-            </div>
-          </div>
+          <div id="imageManagerGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1rem;"></div>
         </div>
       </div>
 
-
-      <!-- ─ Services ─ -->
+      <!-- Services -->
       <div class="page" id="page-services">
         <div class="table-wrap">
           <div class="table-head">
-            <h4>Services</h4>
-            <button class="btn btn-primary" onclick="openModal('serviceModal')"><i class="fas fa-plus"></i> Add Service</button>
+            <h4><i class="fas fa-spa" style="color:var(--rose);margin-right:.4rem;"></i>Services</h4>
+            <button class="btn btn-primary" onclick="openSvcModal()"><i class="fas fa-plus"></i> Add Service</button>
           </div>
           <table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Duration</th><th>Actions</th></tr></thead>
           <tbody id="servicesTable"></tbody></table>
         </div>
       </div>
 
-      <!-- ─ Courses ─ -->
+      <!-- Courses -->
       <div class="page" id="page-courses">
         <div class="table-wrap">
           <div class="table-head">
-            <h4>Courses</h4>
-            <button class="btn btn-primary" onclick="openModal('courseModal')"><i class="fas fa-plus"></i> Add Course</button>
+            <h4><i class="fas fa-graduation-cap" style="color:var(--rose);margin-right:.4rem;"></i>Courses</h4>
+            <button class="btn btn-primary" onclick="openCrsModal()"><i class="fas fa-plus"></i> Add Course</button>
           </div>
           <table><thead><tr><th>Title</th><th>Type</th><th>Duration</th><th>Fee</th><th>Seats</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="coursesTable"></tbody></table>
         </div>
       </div>
 
-      <!-- ─ Gallery ─ -->
+      <!-- Gallery -->
       <div class="page" id="page-gallery">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
-          <h4 style="font-size:1.1rem;">Gallery Images</h4>
-          <button class="btn btn-primary" onclick="openModal('galleryModal')"><i class="fas fa-plus"></i> Add Image</button>
+          <h4 style="font-size:1.1rem;"><i class="fas fa-images" style="color:var(--rose);margin-right:.4rem;"></i>Gallery Images</h4>
+          <button class="btn btn-primary" onclick="openGalModal()"><i class="fas fa-plus"></i> Add Image</button>
         </div>
         <div id="galleryAdmin" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;"></div>
       </div>
 
-      <!-- ─ Offers ─ -->
+      <!-- Offers -->
       <div class="page" id="page-offers">
         <div class="table-wrap">
           <div class="table-head">
-            <h4>Offers & Discounts</h4>
-            <button class="btn btn-primary" onclick="openModal('offerModal')"><i class="fas fa-plus"></i> Add Offer</button>
+            <h4><i class="fas fa-tag" style="color:var(--rose);margin-right:.4rem;"></i>Offers &amp; Discounts</h4>
+            <button class="btn btn-primary" onclick="openOffModal()"><i class="fas fa-plus"></i> Add Offer</button>
           </div>
           <table><thead><tr><th>Title</th><th>Type</th><th>Discount</th><th>Valid Until</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="offersTable"></tbody></table>
         </div>
       </div>
 
-      <!-- ─ Inquiries ─ -->
+      <!-- Inquiries -->
       <div class="page" id="page-inquiries">
         <div class="table-wrap">
           <div class="table-head">
-            <h4>Inquiries</h4>
+            <h4><i class="fas fa-envelope" style="color:var(--rose);margin-right:.4rem;"></i>Inquiries</h4>
             <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="inqSearch" oninput="filterTable('inqSearch','inquiriesTable')"/></div>
           </div>
           <table><thead><tr><th>Name</th><th>Phone</th><th>Service</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
@@ -337,14 +326,14 @@
         </div>
       </div>
 
-      <!-- ─ Students ─ -->
+      <!-- Students -->
       <div class="page" id="page-students">
         <div class="table-wrap">
           <div class="table-head">
-            <h4>Student Records</h4>
+            <h4><i class="fas fa-user-graduate" style="color:var(--rose);margin-right:.4rem;"></i>Student Records</h4>
             <div style="display:flex;gap:.8rem;">
               <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="stSearch" oninput="filterTable('stSearch','studentsTable')"/></div>
-              <button class="btn btn-primary" onclick="openModal('studentModal')"><i class="fas fa-plus"></i> Add Student</button>
+              <button class="btn btn-primary" onclick="openStModal()"><i class="fas fa-plus"></i> Add Student</button>
             </div>
           </div>
           <table><thead><tr><th>Name</th><th>Phone</th><th>Course</th><th>Enroll Date</th><th>Status</th><th>Cert ID</th><th>Actions</th></tr></thead>
@@ -352,23 +341,23 @@
         </div>
       </div>
 
-      <!-- ─ Certificates ─ -->
+      <!-- Certificates -->
       <div class="page" id="page-certificates">
         <div class="table-wrap">
           <div class="table-head">
-            <h4>Issued Certificates</h4>
+            <h4><i class="fas fa-certificate" style="color:var(--rose);margin-right:.4rem;"></i>Issued Certificates</h4>
             <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="certSearch" oninput="filterTable('certSearch','certTable')"/></div>
           </div>
-          <table><thead><tr><th>Cert ID</th><th>Student Name</th><th>Course</th><th>Issue Date</th><th>Status</th></tr></thead>
+          <table><thead><tr><th>Cert ID</th><th>Student Name</th><th>Course</th><th>Issue Date</th><th>Status</th><th>Copy</th></tr></thead>
           <tbody id="certTable"></tbody></table>
         </div>
       </div>
 
-      <!-- ─ Bookings ─ -->
+      <!-- Bookings -->
       <div class="page" id="page-bookings">
         <div class="table-wrap">
           <div class="table-head">
-            <h4>Appointment Bookings</h4>
+            <h4><i class="fas fa-calendar-check" style="color:var(--rose);margin-right:.4rem;"></i>Bookings</h4>
             <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="bkSearch" oninput="filterTable('bkSearch','bookingsTable')"/></div>
           </div>
           <table><thead><tr><th>Name</th><th>Phone</th><th>Service</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
@@ -376,32 +365,32 @@
         </div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app -->
+    </div>
+  </div>
+</div>
 
-<!-- ═══════════ MODALS ═══════════ -->
+<!-- ═══ MODALS ═══ -->
 
 <!-- Service Modal -->
 <div class="modal-overlay" id="serviceModal">
   <div class="modal">
     <div class="modal-header">
-      <h4 id="serviceModalTitle">Add Service</h4>
-      <button class="close-btn" onclick="closeModal('serviceModal')">✕</button>
+      <h4 id="svcModalTitle"><i class="fas fa-spa" style="color:var(--rose);margin-right:.5rem;"></i>Add Service</h4>
+      <button class="close-btn" onclick="closeModal('serviceModal')"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="svc_id"/>
       <div class="form-row">
         <div class="form-group"><label>Service Name *</label><input type="text" id="svc_name"/></div>
-        <div class="form-group"><label>Category</label><input type="text" id="svc_cat" placeholder="e.g. Gel, Basic, Art"/></div>
+        <div class="form-group"><label>Category</label><input type="text" id="svc_cat" placeholder="e.g. Gel, Art"/></div>
         <div class="form-group"><label>Price (₹)</label><input type="number" id="svc_price"/></div>
         <div class="form-group"><label>Duration</label><input type="text" id="svc_duration" placeholder="e.g. 60 min"/></div>
         <div class="form-group full"><label>Description</label><textarea id="svc_desc"></textarea></div>
         <div class="form-group full"><label>Image URL</label>
           <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
-            <input type="text" id="svc_img" oninput="previewImg('svc_img','svc_imgPrev')" style="flex:1"/>
+            <input type="text" id="svc_img" oninput="previewImg('svc_img','svc_imgPrev')" style="flex:1" placeholder="https://..."/>
             <button class="btn btn-secondary btn-sm" onclick="document.getElementById('svc_file').click()"><i class="fas fa-upload"></i></button>
-            <input type="file" id="svc_file" style="display:none" onchange="handleFileUpload(this, 'svc_img', 'svc_imgPrev')"/>
+            <input type="file" id="svc_file" style="display:none" onchange="handleFileUpload(this,'svc_img','svc_imgPrev')"/>
           </div>
           <img class="img-preview" id="svc_imgPrev"/>
         </div>
@@ -409,7 +398,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('serviceModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveService()">Save Service</button>
+      <button class="btn btn-primary" onclick="saveService()"><i class="fas fa-save"></i> Save</button>
     </div>
   </div>
 </div>
@@ -418,8 +407,8 @@
 <div class="modal-overlay" id="courseModal">
   <div class="modal">
     <div class="modal-header">
-      <h4 id="courseModalTitle">Add Course</h4>
-      <button class="close-btn" onclick="closeModal('courseModal')">✕</button>
+      <h4 id="crsModalTitle"><i class="fas fa-graduation-cap" style="color:var(--rose);margin-right:.5rem;"></i>Add Course</h4>
+      <button class="close-btn" onclick="closeModal('courseModal')"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="crs_id"/>
@@ -441,7 +430,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('courseModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveCourse()">Save Course</button>
+      <button class="btn btn-primary" onclick="saveCourse()"><i class="fas fa-save"></i> Save</button>
     </div>
   </div>
 </div>
@@ -450,8 +439,8 @@
 <div class="modal-overlay" id="galleryModal">
   <div class="modal">
     <div class="modal-header">
-      <h4 id="galleryModalTitle">Add Gallery Image</h4>
-      <button class="close-btn" onclick="closeModal('galleryModal')">✕</button>
+      <h4 id="galModalTitle"><i class="fas fa-image" style="color:var(--rose);margin-right:.5rem;"></i>Add Gallery Image</h4>
+      <button class="close-btn" onclick="closeModal('galleryModal')"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="gal_id"/>
@@ -462,7 +451,7 @@
         <div style="display:flex;gap:.5rem;margin-bottom:.5rem;">
           <input type="text" id="gal_url" oninput="previewImg('gal_url','gal_prev')" placeholder="https://..." style="flex:1"/>
           <button class="btn btn-secondary btn-sm" onclick="document.getElementById('gal_file').click()"><i class="fas fa-upload"></i></button>
-          <input type="file" id="gal_file" style="display:none" onchange="handleFileUpload(this, 'gal_url', 'gal_prev')"/>
+          <input type="file" id="gal_file" style="display:none" onchange="handleFileUpload(this,'gal_url','gal_prev')"/>
         </div>
         <img class="img-preview" id="gal_prev" style="height:180px;"/>
       </div>
@@ -471,7 +460,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('galleryModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveGallery()">Save Image</button>
+      <button class="btn btn-primary" onclick="saveGallery()"><i class="fas fa-save"></i> Save</button>
     </div>
   </div>
 </div>
@@ -480,8 +469,8 @@
 <div class="modal-overlay" id="offerModal">
   <div class="modal">
     <div class="modal-header">
-      <h4 id="offerModalTitle">Add Offer</h4>
-      <button class="close-btn" onclick="closeModal('offerModal')">✕</button>
+      <h4 id="offModalTitle"><i class="fas fa-tag" style="color:var(--rose);margin-right:.5rem;"></i>Add Offer</h4>
+      <button class="close-btn" onclick="closeModal('offerModal')"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="off_id"/>
@@ -502,7 +491,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('offerModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveOffer()">Save Offer</button>
+      <button class="btn btn-primary" onclick="saveOffer()"><i class="fas fa-save"></i> Save</button>
     </div>
   </div>
 </div>
@@ -511,8 +500,8 @@
 <div class="modal-overlay" id="studentModal">
   <div class="modal">
     <div class="modal-header">
-      <h4 id="studentModalTitle">Add Student</h4>
-      <button class="close-btn" onclick="closeModal('studentModal')">✕</button>
+      <h4 id="stModalTitle"><i class="fas fa-user-graduate" style="color:var(--rose);margin-right:.5rem;"></i>Add Student</h4>
+      <button class="close-btn" onclick="closeModal('studentModal')"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="st_id"/>
@@ -526,318 +515,429 @@
           <select id="st_mode"><option value="offline">Offline</option><option value="online">Online</option></select></div>
         <div class="form-group"><label>Enroll Date</label><input type="date" id="st_enroll"/></div>
         <div class="form-group"><label>Status</label>
-          <select id="st_status"><option value="active">Active</option><option value="completed">Completed</option><option value="dropped">Dropped</option></select></div>
+          <select id="st_status" onchange="checkCertSection()"><option value="active">Active</option><option value="completed">Completed</option><option value="dropped">Dropped</option></select></div>
         <div class="form-group full"><label>Notes</label><textarea id="st_notes" rows="2"></textarea></div>
       </div>
-      <div id="certSection" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
-        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem;">This student has been marked as completed. Issue a certificate?</p>
+      <div id="certSection" style="display:none;margin-top:1rem;padding:1rem;background:var(--rose-light);border-radius:10px;border-left:4px solid var(--rose);">
+        <p style="font-size:.85rem;color:var(--rose-dark);margin-bottom:.8rem;font-weight:600;">🎓 Issue a certificate for this student?</p>
         <button class="btn btn-success" onclick="issueCert()"><i class="fas fa-certificate"></i> Issue Certificate</button>
         <div id="certResult" style="margin-top:.8rem;"></div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-secondary" onclick="closeModal('studentModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveStudent()">Save Student</button>
+      <button class="btn btn-primary" onclick="saveStudent()"><i class="fas fa-save"></i> Save Student</button>
     </div>
   </div>
 </div>
 
-<div id="adminToast"></div>
+<div id="adminToast"><i class="fas fa-check-circle" id="toastIcon"></i><span id="toastMsg"></span></div>
 
 <script src="github-api.js"></script>
 <script>
-
 let gData = null, gSha = null, editingStudentId = null;
 
-async function loadAllDataFromGithub() {
+// ─── Data ────────────────────────────────────────────────────
+async function loadFromGithub() {
+  setSyncStatus('syncing','Syncing...');
   try {
-    toast('Syncing...', 'info');
-    const { json, sha } = await GithubStorage.getData();
+    const {json,sha} = await GithubStorage.getData();
     gData = json; gSha = sha;
-    toast('Data Synced!', 'success');
-  } catch (e) { toast('Sync Error: ' + e.message, 'error'); }
+    setSyncStatus('ok','Synced with GitHub');
+    updateBadges();
+    return true;
+  } catch(e) { setSyncStatus('error','Sync failed: '+e.message); toast('Load error: '+e.message,'error'); return false; }
 }
 
 async function saveToGithub() {
   try {
-    toast('Saving...', 'info');
-    const res = await GithubStorage.saveData(gData, gSha);
+    setSyncStatus('syncing','Saving...');
+    toast('Saving...','info');
+    const res = await GithubStorage.saveData(gData,gSha);
     gSha = res.content.sha;
-    toast('Saved!', 'success');
+    setSyncStatus('ok','Saved to GitHub');
+    toast('Saved successfully!','success');
+    updateBadges();
     return true;
-  } catch (e) { toast('Save Error: ' + e.message, 'error'); return false; }
+  } catch(e) { setSyncStatus('error','Save failed'); toast('Save error: '+e.message,'error'); return false; }
 }
 
+async function syncData() {
+  const icon = document.getElementById('syncIcon');
+  icon.classList.add('fa-spin');
+  await loadFromGithub();
+  const pg = document.querySelector('.page.active');
+  if (pg) {
+    const map = {'page-dashboard':loadDashboard,'page-siteInfo':loadSiteInfoForm,'page-services':loadServicesTable,'page-courses':loadCoursesTable,'page-gallery':loadGalleryAdmin,'page-offers':loadOffersTable,'page-inquiries':loadInquiriesTable,'page-students':loadStudentsTable,'page-certificates':loadCertTable,'page-bookings':loadBookingsTable,'page-imageManager':loadImageManager};
+    if (map[pg.id]) map[pg.id]();
+  }
+  icon.classList.remove('fa-spin');
+}
 
+function setSyncStatus(type,msg) {
+  const dot=document.getElementById('syncDot'),st=document.getElementById('syncStatus'),ls=document.getElementById('lastSync');
+  if(!dot)return;
+  dot.className='sync-dot'+(type==='syncing'?' syncing':'');
+  dot.style.background=type==='ok'?'var(--success)':type==='error'?'var(--danger)':'var(--warning)';
+  if(st) st.textContent=msg;
+  if(ls) ls.textContent=new Date().toLocaleTimeString('en-IN');
+}
 
-async function handleFileUpload(input, targetId, previewId) {
-  const file = input.files[0]; if (!file) return;
+function updateBadges() {
+  if(!gData)return;
+  const ni=gData.inquiries.filter(i=>i.status==='new').length;
+  const ib=document.getElementById('inqBadge');
+  if(ib){ib.style.display=ni>0?'inline':'none';ib.textContent=ni;}
+  const pb=gData.bookings.filter(b=>b.status==='pending').length;
+  const bb=document.getElementById('bkBadge');
+  if(bb){bb.style.display=pb>0?'inline':'none';bb.textContent=pb;}
+}
+
+// ─── File Upload ─────────────────────────────────────────────
+async function handleFileUpload(input,targetId,previewId) {
+  const file=input.files[0]; if(!file)return;
   try {
-    toast(`Uploading ${file.name}...`, 'info');
-    const url = await GithubStorage.uploadImage(file);
-    document.getElementById(targetId).value = url;
-    if (previewId) { const p = document.getElementById(previewId); p.src = url; p.style.display = 'block'; }
-    toast('Uploaded!', 'success');
-  } catch (e) { toast('Upload Failed: ' + e.message, 'error'); }
+    toast('Uploading '+file.name+'...','info');
+    const url=await GithubStorage.uploadImage(file);
+    document.getElementById(targetId).value=url;
+    if(previewId){const p=document.getElementById(previewId);p.src=url;p.style.display='block';}
+    toast('Uploaded!','success');
+  } catch(e){toast('Upload failed: '+e.message,'error');}
 }
 
+// ─── Auth ─────────────────────────────────────────────────────
 async function doLogin() {
-  const u = document.getElementById('loginUser').value.trim(), p = document.getElementById('loginPass').value;
-  const admin = gData ? gData.admin : { username: 'admin', password: 'janki@2024' };
-  if (u === admin.username && p === admin.password) {
-    localStorage.setItem('jnaToken', 'admin_token');
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    await loadAllDataFromGithub();
+  const u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value;
+  const adm=gData?gData.admin:{username:'admin',password:'janki@2024'};
+  if(u===adm.username&&p===adm.password){
+    localStorage.setItem('jnaToken','admin_token');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    if(!gData) await loadFromGithub();
     loadDashboard();
-  } else toast('Invalid credentials', 'error');
+  } else {
+    const err=document.getElementById('loginErr');err.style.display='block';
+    setTimeout(()=>err.style.display='none',3000);
+  }
 }
+function logout(){localStorage.removeItem('jnaToken');location.reload();}
 
-function logout() { localStorage.removeItem('jnaToken'); location.reload(); }
-
-async function showPage(name, el) {
-  if (!gData) await loadAllDataFromGithub();
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if (document.getElementById('page-' + name)) document.getElementById('page-' + name).classList.add('active');
-  if (el) el.classList.add('active');
-  const titles = {dashboard:'Dashboard',siteInfo:'Site Info',services:'Services',courses:'Courses',gallery:'Gallery',offers:'Offers',inquiries:'Inquiries',students:'Students',certificates:'Certs',bookings:'Bookings',imageManager:'Image Manager'};
-  document.getElementById('pageTitle').textContent = titles[name] || name;
-  const map = {siteInfo:loadSiteInfoForm,services:loadServicesTable,courses:loadCoursesTable,gallery:loadGalleryAdmin,offers:loadOffersTable,inquiries:loadInquiriesTable,students:loadStudentsTable,certificates:loadCertTable,bookings:loadBookingsTable,imageManager:loadImageManager,dashboard:loadDashboard};
-  if (map[name]) map[name]();
-  if (window.innerWidth <= 768) toggleSidebar();
+// ─── Navigation ───────────────────────────────────────────────
+async function showPage(name,el) {
+  if(!gData) await loadFromGithub();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');
+  if(el)el.classList.add('active');
+  const titles={dashboard:'Dashboard',siteInfo:'Site Information',services:'Services',courses:'Courses',gallery:'Gallery',offers:'Offers & Discounts',inquiries:'Inquiries',students:'Students',certificates:'Certificates',bookings:'Bookings',imageManager:'Image Manager'};
+  document.getElementById('pageTitle').textContent=titles[name]||name;
+  const map={dashboard:loadDashboard,siteInfo:loadSiteInfoForm,services:loadServicesTable,courses:loadCoursesTable,gallery:loadGalleryAdmin,offers:loadOffersTable,inquiries:loadInquiriesTable,students:loadStudentsTable,certificates:loadCertTable,bookings:loadBookingsTable,imageManager:loadImageManager};
+  if(map[name])map[name]();
+  if(window.innerWidth<=768){document.getElementById('sidebar').classList.remove('open');}
 }
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
 
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-
+// ─── Dashboard ────────────────────────────────────────────────
 function loadDashboard() {
-  const s = { students: gData.students.length, certs: gData.certificates.length, inqs: gData.inquiries.length, newInqs: gData.inquiries.filter(i => i.status === 'new').length };
-  const stats = [ {n:s.students,l:'Students',i:'fa-user-graduate'}, {n:s.certs,l:'Certs',i:'fa-certificate'}, {n:s.inqs,l:'Inquiries',i:'fa-envelope'}, {n:s.newInqs,l:'New',i:'fa-bell'} ];
-  document.getElementById('statsGrid').innerHTML = stats.map(st => `<div class="stat-card"><div class="stat-icon"><i class="fas ${st.i}"></i></div><div class="stat-info"><div class="num">${st.n}</div><div class="lbl">${st.l}</div></div></div>`).join('');
-  const renderList = (id, list) => document.getElementById(id).innerHTML = list.length ? list.slice(-5).reverse().map(item => `<tr><td>${item.name}</td><td>${item.phone || item.course}</td><td>${statusBadge(item.status)}</td></tr>`).join('') : '<tr><td colspan="3">None</td></tr>';
-  renderList('dashInquiries', gData.inquiries); renderList('dashStudents', gData.students);
+  if(!gData)return;
+  const stats=[
+    {n:gData.students.length,l:'Total Students',i:'fa-user-graduate',c:'#c8365a',bg:'#fde8ee'},
+    {n:gData.students.filter(s=>s.status==='active').length,l:'Active Students',i:'fa-user-check',c:'#22c55e',bg:'#dcfce7'},
+    {n:gData.certificates.length,l:'Certificates',i:'fa-certificate',c:'#c9a96e',bg:'#fef9ec'},
+    {n:gData.inquiries.filter(i=>i.status==='new').length,l:'New Inquiries',i:'fa-bell',c:'#3b82f6',bg:'#dbeafe'},
+    {n:gData.offers.filter(o=>o.active).length,l:'Active Offers',i:'fa-tag',c:'#9c27b0',bg:'#f3e5f5'},
+    {n:gData.gallery.length,l:'Gallery Items',i:'fa-images',c:'#f59e0b',bg:'#fef3c7'}
+  ];
+  document.getElementById('statsGrid').innerHTML=stats.map(s=>`<div class="stat-card" style="border-left-color:${s.c}"><div class="stat-icon" style="background:${s.bg};color:${s.c}"><i class="fas ${s.i}"></i></div><div class="stat-info"><div class="num" style="color:${s.c}">${s.n}</div><div class="lbl">${s.l}</div></div></div>`).join('');
+  document.getElementById('dashInquiries').innerHTML=gData.inquiries.length?gData.inquiries.slice(-5).reverse().map(i=>`<tr><td>${i.name}</td><td>${i.phone}</td><td>${sbadge(i.status)}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-cell">No inquiries</td></tr>';
+  document.getElementById('dashStudents').innerHTML=gData.students.length?gData.students.slice(-5).reverse().map(s=>`<tr><td>${s.name}</td><td>${s.course}</td><td>${sbadge(s.status)}</td></tr>`).join(''):'<tr><td colspan="3" class="empty-cell">No students</td></tr>';
 }
 
-function statusBadge(s) { const map = {new:'info',active:'success',completed:'success',pending:'warning',replied:'purple',dropped:'danger'}; return `<span class="badge badge-${map[s]||'info'}">${s}</span>`; }
+function sbadge(s){const m={new:'info',active:'success',completed:'success',pending:'warning',replied:'purple',dropped:'danger',confirmed:'success',inactive:'inactive'};return `<span class="badge badge-${m[s]||'info'}">${s}</span>`;}
 
+// ─── Site Info ────────────────────────────────────────────────
 function loadSiteInfoForm() {
-  const d = gData.siteInfo;
-  ['name','tagline','phone','whatsapp','email','address','openHours','instagram','description','heroImage'].forEach(k => document.getElementById(`si_${k}`).value = d[k]||'');
-  if (d.heroImage) { const p = document.getElementById('si_heroPreview'); p.src = d.heroImage; p.style.display='block'; }
+  const d=gData.siteInfo;
+  ['name','tagline','phone','whatsapp','email','address','openHours','instagram','description','heroImage'].forEach(k=>{const el=document.getElementById('si_'+k);if(el)el.value=d[k]||'';});
+  if(d.heroImage){const p=document.getElementById('si_heroPreview');p.src=d.heroImage;p.style.display='block';}
+}
+async function saveSiteInfo() {
+  ['name','tagline','phone','whatsapp','email','address','openHours','instagram','description','heroImage'].forEach(k=>{const el=document.getElementById('si_'+k);if(el)gData.siteInfo[k]=el.value;});
+  await saveToGithub();
 }
 
-function saveSiteInfo() {
-  ['name','tagline','phone','whatsapp','email','address','openHours','instagram','description','heroImage'].forEach(k => gData.siteInfo[k] = document.getElementById(`si_${k}`).value);
-  saveToGithub();
-}
-
+// ─── Services ─────────────────────────────────────────────────
 function loadServicesTable() {
-  document.getElementById('servicesTable').innerHTML = gData.services.map(s => `<tr><td>${s.name}</td><td>${s.category}</td><td>₹${s.price}</td><td>${s.duration}</td><td><button class="btn btn-secondary btn-sm" onclick="editService('${s.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="deleteItem('services','${s.id}',loadServicesTable)">Del</button></td></tr>`).join('');
+  const tb=document.getElementById('servicesTable');
+  if(!gData.services.length){tb.innerHTML='<tr><td colspan="5" class="empty-cell">No services yet. Add your first service!</td></tr>';return;}
+  tb.innerHTML=gData.services.map(s=>`<tr><td><strong>${s.name}</strong></td><td><span class="badge badge-info">${s.category||'—'}</span></td><td><strong style="color:var(--rose)">₹${s.price}</strong></td><td>${s.duration||'—'}</td><td><div class="action-btns"><button class="btn btn-secondary btn-sm btn-icon" onclick="editService('${s.id}')" title="Edit"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm btn-icon" onclick="delItem('services','${s.id}',loadServicesTable)" title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
 }
-
+function openSvcModal(){document.getElementById('svcModalTitle').innerHTML='<i class="fas fa-spa" style="color:var(--rose);margin-right:.5rem;"></i>Add Service';document.getElementById('svc_id').value='';openModal('serviceModal');}
 function editService(id) {
-  const s = gData.services.find(i => i.id === id);
-  ['id','name','cat','price','duration','desc','img'].forEach(k => document.getElementById(`svc_${k}`).value = s[k==='cat'?'category':k==='img'?'image':k]||'');
-  if (s.image) { const p = document.getElementById('svc_imgPrev'); p.src=s.image; p.style.display='block'; }
+  const s=gData.services.find(i=>i.id===id);
+  document.getElementById('svcModalTitle').innerHTML='<i class="fas fa-edit" style="color:var(--rose);margin-right:.5rem;"></i>Edit Service';
+  document.getElementById('svc_id').value=s.id;
+  document.getElementById('svc_name').value=s.name||'';
+  document.getElementById('svc_cat').value=s.category||'';
+  document.getElementById('svc_price').value=s.price||'';
+  document.getElementById('svc_duration').value=s.duration||'';
+  document.getElementById('svc_desc').value=s.description||'';
+  document.getElementById('svc_img').value=s.image||'';
+  if(s.image){const p=document.getElementById('svc_imgPrev');p.src=s.image;p.style.display='block';}
   openModal('serviceModal');
 }
-
 async function saveService() {
-  const id = document.getElementById('svc_id').value;
-  const s = { id: id || 's_'+Date.now(), name: document.getElementById('svc_name').value, category: document.getElementById('svc_cat').value, price: +document.getElementById('svc_price').value, duration: document.getElementById('svc_duration').value, description: document.getElementById('svc_desc').value, image: document.getElementById('svc_img').value };
-  if (id) gData.services[gData.services.findIndex(x=>x.id===id)] = s; else gData.services.push(s);
-  if (await saveToGithub()) { closeModal('serviceModal'); loadServicesTable(); }
+  const name=document.getElementById('svc_name').value.trim();
+  if(!name){toast('Service name required','error');return;}
+  const id=document.getElementById('svc_id').value;
+  const s={id:id||genId('s'),name,category:document.getElementById('svc_cat').value,price:+document.getElementById('svc_price').value,duration:document.getElementById('svc_duration').value,description:document.getElementById('svc_desc').value,image:document.getElementById('svc_img').value};
+  if(id)gData.services[gData.services.findIndex(x=>x.id===id)]=s;else gData.services.push(s);
+  if(await saveToGithub()){closeModal('serviceModal');loadServicesTable();}
 }
 
+// ─── Courses ──────────────────────────────────────────────────
 function loadCoursesTable() {
-  document.getElementById('coursesTable').innerHTML = gData.courses.map(c => `<tr><td>${c.title}</td><td>${c.type}</td><td>${c.duration}</td><td>₹${c.fee}</td><td>${c.seats}</td><td>${statusBadge(c.active?'active':'inactive')}</td><td><button class="btn btn-secondary btn-sm" onclick="editCourse('${c.id}')">Edit</button></td></tr>`).join('');
+  const tb=document.getElementById('coursesTable');
+  if(!gData.courses.length){tb.innerHTML='<tr><td colspan="7" class="empty-cell">No courses yet.</td></tr>';return;}
+  tb.innerHTML=gData.courses.map(c=>`<tr><td><strong>${c.title}</strong></td><td><span class="badge ${c.type==='online'?'badge-success':c.type==='both'?'badge-purple':'badge-warning'}">${c.type}</span></td><td>${c.duration}</td><td><strong style="color:var(--rose)">₹${c.fee}</strong></td><td>${c.seats}</td><td>${sbadge(c.active?'active':'inactive')}</td><td><div class="action-btns"><button class="btn btn-secondary btn-sm btn-icon" onclick="editCourse('${c.id}')" title="Edit"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm btn-icon" onclick="delItem('courses','${c.id}',loadCoursesTable)" title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
 }
-
+function openCrsModal(){document.getElementById('crsModalTitle').innerHTML='<i class="fas fa-graduation-cap" style="color:var(--rose);margin-right:.5rem;"></i>Add Course';document.getElementById('crs_id').value='';openModal('courseModal');}
 function editCourse(id) {
-  const c = gData.courses.find(i => i.id === id);
-  ['id','title','type','duration','fee','seats', 'schedule','desc','topics','cert','active'].forEach(k => {
-    const el = document.getElementById(`crs_${k}`);
-    if (k==='topics') el.value = (c[k]||[]).join(', ');
-    else el.value = String(c[k==='desc'?'description':k==='cert'?'certificate':k]);
-  });
+  const c=gData.courses.find(i=>i.id===id);
+  document.getElementById('crsModalTitle').innerHTML='<i class="fas fa-edit" style="color:var(--rose);margin-right:.5rem;"></i>Edit Course';
+  document.getElementById('crs_id').value=c.id;
+  document.getElementById('crs_title').value=c.title||'';
+  document.getElementById('crs_type').value=c.type||'offline';
+  document.getElementById('crs_duration').value=c.duration||'';
+  document.getElementById('crs_fee').value=c.fee||'';
+  document.getElementById('crs_seats').value=c.seats||'';
+  document.getElementById('crs_schedule').value=c.schedule||'';
+  document.getElementById('crs_desc').value=c.description||'';
+  document.getElementById('crs_topics').value=(c.topics||[]).join(', ');
+  document.getElementById('crs_cert').value=String(c.certificate);
+  document.getElementById('crs_active').value=String(c.active);
   openModal('courseModal');
 }
-
 async function saveCourse() {
-  const id = document.getElementById('crs_id').value;
-  const c = { id: id || 'c_'+Date.now(), title: document.getElementById('crs_title').value, type: document.getElementById('crs_type').value, duration: document.getElementById('crs_duration').value, fee: +document.getElementById('crs_fee').value, seats: +document.getElementById('crs_seats').value, schedule: document.getElementById('crs_schedule').value, description: document.getElementById('crs_desc').value, topics: document.getElementById('crs_topics').value.split(',').map(t=>t.trim()).filter(Boolean), certificate: document.getElementById('crs_cert').value==='true', active: document.getElementById('crs_active').value==='true' };
-  if (id) gData.courses[gData.courses.findIndex(x=>x.id===id)] = c; else gData.courses.push(c);
-  if (await saveToGithub()) { closeModal('courseModal'); loadCoursesTable(); }
+  const title=document.getElementById('crs_title').value.trim();
+  if(!title){toast('Course title required','error');return;}
+  const id=document.getElementById('crs_id').value;
+  const c={id:id||genId('c'),title,type:document.getElementById('crs_type').value,duration:document.getElementById('crs_duration').value,fee:+document.getElementById('crs_fee').value,seats:+document.getElementById('crs_seats').value,schedule:document.getElementById('crs_schedule').value,description:document.getElementById('crs_desc').value,topics:document.getElementById('crs_topics').value.split(',').map(t=>t.trim()).filter(Boolean),certificate:document.getElementById('crs_cert').value==='true',active:document.getElementById('crs_active').value==='true'};
+  if(id)gData.courses[gData.courses.findIndex(x=>x.id===id)]=c;else gData.courses.push(c);
+  if(await saveToGithub()){closeModal('courseModal');loadCoursesTable();}
 }
 
+// ─── Gallery ──────────────────────────────────────────────────
 function loadGalleryAdmin() {
-  document.getElementById('galleryAdmin').innerHTML = gData.gallery.map(g => `<div class="gal-card"><img src="${g.imageUrl}" style="width:100%;height:120px;object-fit:cover"/><div>${g.title}<br><button onclick="editGallery('${g.id}')">Edit</button><button onclick="deleteItem('gallery','${g.id}',loadGalleryAdmin)">Del</button></div></div>`).join('');
+  const grid=document.getElementById('galleryAdmin');
+  if(!gData.gallery.length){grid.innerHTML='<div style="text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1"><i class="fas fa-images" style="font-size:2rem;margin-bottom:1rem;display:block;opacity:.4;"></i>No gallery images yet.</div>';return;}
+  grid.innerHTML=gData.gallery.map(g=>`<div class="gal-card"><img src="${g.imageUrl}" alt="${g.title}" onerror="this.src='https://via.placeholder.com/200x150?text=Image'"/><div class="gal-card-body"><div class="gal-card-title">${g.title}</div><div class="gal-card-cat">${g.category||'—'} ${g.featured?'⭐ Featured':''}</div><div class="gal-card-actions"><button class="btn btn-secondary btn-sm" onclick="editGallery('${g.id}')"><i class="fas fa-edit"></i> Edit</button><button class="btn btn-danger btn-sm" onclick="delItem('gallery','${g.id}',loadGalleryAdmin)"><i class="fas fa-trash"></i></button></div></div></div>`).join('');
 }
-
+function openGalModal(){document.getElementById('galModalTitle').innerHTML='<i class="fas fa-image" style="color:var(--rose);margin-right:.5rem;"></i>Add Gallery Image';document.getElementById('gal_id').value='';openModal('galleryModal');}
 function editGallery(id) {
-  const g = gData.gallery.find(i => i.id === id);
-  ['id','title','cat','url','featured'].forEach(k => document.getElementById(`gal_${k}`).value = String(g[k==='cat'?'category':k==='url'?'imageUrl':k]));
-  if (g.imageUrl) { const p = document.getElementById('gal_prev'); p.src=g.imageUrl; p.style.display='block'; }
+  const g=gData.gallery.find(i=>i.id===id);
+  document.getElementById('galModalTitle').innerHTML='<i class="fas fa-edit" style="color:var(--rose);margin-right:.5rem;"></i>Edit Gallery Image';
+  document.getElementById('gal_id').value=g.id;
+  document.getElementById('gal_title').value=g.title||'';
+  document.getElementById('gal_cat').value=g.category||'';
+  document.getElementById('gal_url').value=g.imageUrl||'';
+  document.getElementById('gal_featured').value=String(g.featured);
+  if(g.imageUrl){const p=document.getElementById('gal_prev');p.src=g.imageUrl;p.style.display='block';}
   openModal('galleryModal');
 }
-
 async function saveGallery() {
-  const id = document.getElementById('gal_id').value;
-  const g = { id: id || 'g_'+Date.now(), title: document.getElementById('gal_title').value, category: document.getElementById('gal_cat').value, imageUrl: document.getElementById('gal_url').value, featured: document.getElementById('gal_featured').value==='true', addedDate: new Date().toISOString().split('T')[0] };
-  if (id) gData.gallery[gData.gallery.findIndex(x=>x.id===id)] = g; else gData.gallery.push(g);
-  if (await saveToGithub()) { closeModal('galleryModal'); loadGalleryAdmin(); }
+  const title=document.getElementById('gal_title').value.trim(),url=document.getElementById('gal_url').value.trim();
+  if(!title||!url){toast('Title and image URL required','error');return;}
+  const id=document.getElementById('gal_id').value;
+  const g={id:id||genId('g'),title,category:document.getElementById('gal_cat').value,imageUrl:url,featured:document.getElementById('gal_featured').value==='true',addedDate:new Date().toISOString().split('T')[0]};
+  if(id)gData.gallery[gData.gallery.findIndex(x=>x.id===id)]=g;else gData.gallery.push(g);
+  if(await saveToGithub()){closeModal('galleryModal');loadGalleryAdmin();}
 }
 
+// ─── Offers ───────────────────────────────────────────────────
 function loadOffersTable() {
-  document.getElementById('offersTable').innerHTML = gData.offers.map(o => `<tr><td>${o.title}</td><td>${o.type}</td><td>${o.discount}${o.discountType==='percent'?'%':'₹'}</td><td>${o.validTo}</td><td>${statusBadge(o.active?'active':'inactive')}</td><td><button onclick="editOffer('${o.id}')">Edit</button></td></tr>`).join('');
+  const tb=document.getElementById('offersTable');
+  if(!gData.offers.length){tb.innerHTML='<tr><td colspan="6" class="empty-cell">No offers yet.</td></tr>';return;}
+  tb.innerHTML=gData.offers.map(o=>`<tr><td><strong>${o.title}</strong></td><td><span class="badge badge-purple">${o.type}</span></td><td><strong style="color:var(--rose)">${o.discount}${o.discountType==='percent'?'%':'₹'} OFF</strong></td><td>${o.validTo||'—'}</td><td>${sbadge(o.active?'active':'inactive')}</td><td><div class="action-btns"><button class="btn btn-secondary btn-sm btn-icon" onclick="editOffer('${o.id}')" title="Edit"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm btn-icon" onclick="delItem('offers','${o.id}',loadOffersTable)" title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
 }
-
+function openOffModal(){document.getElementById('offModalTitle').innerHTML='<i class="fas fa-tag" style="color:var(--rose);margin-right:.5rem;"></i>Add Offer';document.getElementById('off_id').value='';openModal('offerModal');}
 function editOffer(id) {
-  const o = gData.offers.find(i => i.id === id);
-  ['id','title','type','discount','dtype','from','to','desc','bg','active'].forEach(k => document.getElementById(`off_${k}`).value = String(o[k==='dtype'?'discountType':k==='from'?'validFrom':k==='to'?'validTo':k==='desc'?'description':k==='bg'?'bgColor':k]));
+  const o=gData.offers.find(i=>i.id===id);
+  document.getElementById('offModalTitle').innerHTML='<i class="fas fa-edit" style="color:var(--rose);margin-right:.5rem;"></i>Edit Offer';
+  document.getElementById('off_id').value=o.id;
+  document.getElementById('off_title').value=o.title||'';
+  document.getElementById('off_type').value=o.type||'discount';
+  document.getElementById('off_discount').value=o.discount||'';
+  document.getElementById('off_dtype').value=o.discountType||'percent';
+  document.getElementById('off_from').value=o.validFrom||'';
+  document.getElementById('off_to').value=o.validTo||'';
+  document.getElementById('off_desc').value=o.description||'';
+  document.getElementById('off_bg').value=o.bgColor||'#c8365a';
+  document.getElementById('off_active').value=String(o.active);
   openModal('offerModal');
 }
-
 async function saveOffer() {
-  const id = document.getElementById('off_id').value;
-  const o = { id: id || 'o_'+Date.now(), title: document.getElementById('off_title').value, type: document.getElementById('off_type').value, discount: +document.getElementById('off_discount').value, discountType: document.getElementById('off_dtype').value, validFrom: document.getElementById('off_from').value, validTo: document.getElementById('off_to').value, description: document.getElementById('off_desc').value, bgColor: document.getElementById('off_bg').value, active: document.getElementById('off_active').value==='true' };
-  if (id) gData.offers[gData.offers.findIndex(x=>x.id===id)] = o; else gData.offers.push(o);
-  if (await saveToGithub()) { closeModal('offerModal'); loadOffersTable(); }
+  const title=document.getElementById('off_title').value.trim();
+  if(!title){toast('Offer title required','error');return;}
+  const id=document.getElementById('off_id').value;
+  const o={id:id||genId('o'),title,type:document.getElementById('off_type').value,discount:+document.getElementById('off_discount').value,discountType:document.getElementById('off_dtype').value,validFrom:document.getElementById('off_from').value,validTo:document.getElementById('off_to').value,description:document.getElementById('off_desc').value,bgColor:document.getElementById('off_bg').value,active:document.getElementById('off_active').value==='true'};
+  if(id)gData.offers[gData.offers.findIndex(x=>x.id===id)]=o;else gData.offers.push(o);
+  if(await saveToGithub()){closeModal('offerModal');loadOffersTable();}
 }
 
-function loadInquiriesTable() { document.getElementById('inquiriesTable').innerHTML = gData.inquiries.map(i => `<tr><td>${i.name}</td><td>${i.phone}</td><td>${i.service}</td><td>${statusBadge(i.status)}</td><td><button class="btn btn-secondary btn-sm" onclick="markInquiryReplied('${i.id}')">Replied</button></td></tr>`).join(''); }
-async function markInquiryReplied(id) { gData.inquiries.find(i=>i.id===id).status = 'replied'; if (await saveToGithub()) loadInquiriesTable(); }
+// ─── Inquiries ────────────────────────────────────────────────
+function loadInquiriesTable() {
+  const tb=document.getElementById('inquiriesTable');
+  if(!gData.inquiries.length){tb.innerHTML='<tr><td colspan="6" class="empty-cell">No inquiries yet.</td></tr>';return;}
+  tb.innerHTML=gData.inquiries.slice().reverse().map(i=>`<tr><td><strong>${i.name}</strong></td><td>${i.phone}</td><td>${i.service||'—'}</td><td style="font-size:.78rem;color:var(--muted);">${i.date?new Date(i.date).toLocaleDateString('en-IN'):'—'}</td><td>${sbadge(i.status)}</td><td><div class="action-btns">${i.status!=='replied'?`<button class="btn btn-success btn-sm btn-icon" onclick="markInqReplied('${i.id}')" title="Mark Replied"><i class="fas fa-reply"></i></button>`:''}<button class="btn btn-danger btn-sm btn-icon" onclick="delItem('inquiries','${i.id}',loadInquiriesTable)" title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+}
+async function markInqReplied(id){gData.inquiries.find(i=>i.id===id).status='replied';if(await saveToGithub())loadInquiriesTable();}
 
-function loadBookingsTable() { document.getElementById('bookingsTable').innerHTML = gData.bookings.map(b => `<tr><td>${b.name}</td><td>${b.phone}</td><td>${b.service}</td><td>${b.date}</td><td>${statusBadge(b.status)}</td><td><button class="btn btn-secondary btn-sm" onclick="markBookingConfirmed('${b.id}')">Confirm</button></td></tr>`).join(''); }
-async function markBookingConfirmed(id) { gData.bookings.find(b=>b.id===id).status = 'confirmed'; if (await saveToGithub()) loadBookingsTable(); }
+// ─── Bookings ─────────────────────────────────────────────────
+function loadBookingsTable() {
+  const tb=document.getElementById('bookingsTable');
+  if(!gData.bookings.length){tb.innerHTML='<tr><td colspan="7" class="empty-cell">No bookings yet.</td></tr>';return;}
+  tb.innerHTML=gData.bookings.slice().reverse().map(b=>`<tr><td><strong>${b.name}</strong></td><td>${b.phone}</td><td>${b.service||'—'}</td><td>${b.date||'—'}</td><td>${b.time||'—'}</td><td>${sbadge(b.status)}</td><td><div class="action-btns">${b.status==='pending'?`<button class="btn btn-success btn-sm btn-icon" onclick="confirmBooking('${b.id}')" title="Confirm"><i class="fas fa-check"></i></button>`:''}<button class="btn btn-danger btn-sm btn-icon" onclick="delItem('bookings','${b.id}',loadBookingsTable)" title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+}
+async function confirmBooking(id){gData.bookings.find(b=>b.id===id).status='confirmed';if(await saveToGithub())loadBookingsTable();}
 
-function loadStudentsTable() { document.getElementById('studentsTable').innerHTML = gData.students.map(s => `<tr><td>${s.name}</td><td>${s.phone}</td><td>${s.course}</td><td>${statusBadge(s.status)}</td><td><button class="btn btn-secondary btn-sm" onclick="editStudent('${s.id}')">Edit</button></td></tr>`).join(''); }
+// ─── Students ─────────────────────────────────────────────────
+function loadStudentsTable() {
+  const tb=document.getElementById('studentsTable');
+  if(!gData.students.length){tb.innerHTML='<tr><td colspan="7" class="empty-cell">No students yet.</td></tr>';return;}
+  tb.innerHTML=gData.students.slice().reverse().map(s=>`<tr><td><strong>${s.name}</strong><br><span style="font-size:.75rem;color:var(--muted);">${s.email||''}</span></td><td>${s.phone}</td><td>${s.course}</td><td style="font-size:.8rem;">${s.enrollDate||'—'}</td><td>${sbadge(s.status)}</td><td>${s.certId?`<code style="font-size:.72rem;background:var(--rose-light);color:var(--rose);padding:.2rem .4rem;border-radius:4px;">${s.certId}</code>`:'<span style="color:var(--muted);font-size:.78rem;">None</span>'}</td><td><div class="action-btns"><button class="btn btn-secondary btn-sm btn-icon" onclick="editStudent('${s.id}')" title="Edit"><i class="fas fa-edit"></i></button>${(!s.certId&&s.status==='completed')?`<button class="btn btn-warning btn-sm btn-icon" onclick="quickCert('${s.id}')" title="Issue Certificate"><i class="fas fa-certificate"></i></button>`:''}<button class="btn btn-danger btn-sm btn-icon" onclick="delItem('students','${s.id}',loadStudentsTable)" title="Delete"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+}
+function openStModal(){editingStudentId=null;document.getElementById('stModalTitle').innerHTML='<i class="fas fa-user-plus" style="color:var(--rose);margin-right:.5rem;"></i>Add Student';document.getElementById('st_id').value='';document.getElementById('certSection').style.display='none';openModal('studentModal');}
 function editStudent(id) {
-  const s = gData.students.find(i => i.id === id); editingStudentId = id;
-  ['id','name','phone','email','course','batch','mode','enroll','status'].forEach(k => document.getElementById(`st_${k}`).value = s[k==='enroll'?'enrollDate':k]||'');
-  document.getElementById('certSection').style.display = (s.status === 'completed' && !s.certId) ? 'block' : 'none';
+  const s=gData.students.find(i=>i.id===id);editingStudentId=id;
+  document.getElementById('stModalTitle').innerHTML='<i class="fas fa-user-edit" style="color:var(--rose);margin-right:.5rem;"></i>Edit Student';
+  document.getElementById('st_id').value=s.id;
+  document.getElementById('st_name').value=s.name||'';
+  document.getElementById('st_phone').value=s.phone||'';
+  document.getElementById('st_email').value=s.email||'';
+  document.getElementById('st_course').value=s.course||'';
+  document.getElementById('st_batch').value=s.batch||'';
+  document.getElementById('st_mode').value=s.mode||'offline';
+  document.getElementById('st_enroll').value=s.enrollDate||'';
+  document.getElementById('st_status').value=s.status||'active';
+  document.getElementById('st_notes').value=s.notes||'';
+  document.getElementById('certSection').style.display=(s.status==='completed'&&!s.certId)?'block':'none';
+  document.getElementById('certResult').innerHTML='';
   openModal('studentModal');
 }
+function checkCertSection(){
+  const status=document.getElementById('st_status').value,id=document.getElementById('st_id').value;
+  const st=id?gData.students.find(s=>s.id===id):null;
+  document.getElementById('certSection').style.display=(status==='completed'&&(!st||!st.certId))?'block':'none';
+}
 async function saveStudent() {
-  const id = document.getElementById('st_id').value;
-  const s = { id: id || 'st_'+Date.now(), name: document.getElementById('st_name').value, phone: document.getElementById('st_phone').value, email: document.getElementById('st_email').value, course: document.getElementById('st_course').value, batch: document.getElementById('st_batch').value, mode: document.getElementById('st_mode').value, enrollDate: document.getElementById('st_enroll').value, status: document.getElementById('st_status').value };
-  if (id) { const old = gData.students.find(x=>x.id===id); s.certId = old.certId; s.completionDate = old.completionDate; gData.students[gData.students.findIndex(x=>x.id===id)] = s; } else gData.students.push(s);
-  if (await saveToGithub()) { closeModal('studentModal'); loadStudentsTable(); }
+  const name=document.getElementById('st_name').value.trim(),phone=document.getElementById('st_phone').value.trim();
+  if(!name||!phone){toast('Name and phone required','error');return;}
+  const id=document.getElementById('st_id').value;
+  const s={id:id||genId('st'),name,phone,email:document.getElementById('st_email').value,course:document.getElementById('st_course').value,batch:document.getElementById('st_batch').value,mode:document.getElementById('st_mode').value,enrollDate:document.getElementById('st_enroll').value,status:document.getElementById('st_status').value,notes:document.getElementById('st_notes').value};
+  if(id){const old=gData.students.find(x=>x.id===id);s.certId=old.certId;s.completionDate=old.completionDate;gData.students[gData.students.findIndex(x=>x.id===id)]=s;}
+  else{gData.students.push(s);editingStudentId=s.id;}
+  if(s.status==='completed'&&!s.certId){
+    const cid=genCertId();s.certId=cid;s.completionDate=new Date().toISOString().split('T')[0];
+    gData.certificates.push({certId:cid,studentId:s.id,studentName:s.name,course:s.course,issueDate:s.completionDate,valid:true});
+  }
+  if(await saveToGithub()){closeModal('studentModal');loadStudentsTable();}
 }
-function loadCertTable() { document.getElementById('certTable').innerHTML = gData.certificates.map(c => `<tr><td>${c.certId}</td><td>${c.studentName}</td><td>${c.course}</td><td>${c.issueDate}</td></tr>`).join(''); }
+
+async function quickCert(studentId){editingStudentId=studentId;await issueCert();loadStudentsTable();}
 async function issueCert() {
-  const s = gData.students.find(x=>x.id===editingStudentId), certId = 'JNA-'+Date.now();
-  s.certId = certId; s.completionDate = new Date().toISOString().split('T')[0];
-  gData.certificates.push({ certId, studentId: s.id, studentName: s.name, course: s.course, issueDate: s.completionDate });
-  if (await saveToGithub()) { document.getElementById('certSection').style.display='none'; toast('Certificate Issued!','success'); }
+  const s=gData.students.find(x=>x.id===editingStudentId);
+  if(!s){toast('Student not found','error');return;}
+  const cid=genCertId();
+  s.certId=cid;s.status='completed';s.completionDate=new Date().toISOString().split('T')[0];
+  gData.certificates.push({certId:cid,studentId:s.id,studentName:s.name,course:s.course,issueDate:s.completionDate,valid:true});
+  if(await saveToGithub()){
+    const cs=document.getElementById('certSection');if(cs)cs.style.display='none';
+    const cr=document.getElementById('certResult');if(cr)cr.innerHTML=`<div class="cert-card"><h4>🎓 Certificate Issued!</h4><div class="cert-id">${cid}</div></div>`;
+    toast('Certificate issued: '+cid,'success');
+  }
 }
 
-async function deleteItem(table, id, cb) { if (confirm('Delete?')) { gData[table].splice(gData[table].findIndex(i=>i.id===id), 1); if (await saveToGithub()) cb(); } }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { 
-  document.getElementById(id).classList.remove('open');
-  document.getElementById(id).querySelectorAll('input, textarea').forEach(i => i.value = '');
-  document.getElementById(id).querySelectorAll('.img-preview').forEach(p => { p.src = ''; p.style.display = 'none'; });
+// ─── Certificates ─────────────────────────────────────────────
+function loadCertTable() {
+  const tb=document.getElementById('certTable');
+  if(!gData.certificates.length){tb.innerHTML='<tr><td colspan="6" class="empty-cell">No certificates issued yet.</td></tr>';return;}
+  tb.innerHTML=gData.certificates.slice().reverse().map(c=>`<tr><td><code style="background:var(--rose-light);color:var(--rose);padding:.2rem .5rem;border-radius:4px;font-weight:700;">${c.certId}</code></td><td><strong>${c.studentName}</strong></td><td>${c.course}</td><td>${c.issueDate}</td><td><span class="badge badge-success">✅ Valid</span></td><td><button class="btn btn-info btn-sm btn-icon" onclick="copyText('${c.certId}')" title="Copy ID"><i class="fas fa-copy"></i></button></td></tr>`).join('');
 }
-function previewImg(inpId, preId) { const url = document.getElementById(inpId).value, p = document.getElementById(preId); if (url) { p.src = url; p.style.display = 'block'; } else p.style.display='none'; }
-function toast(msg, type='success') { const t = document.getElementById('adminToast'); t.textContent = msg; t.className = 'show ' + type; setTimeout(() => t.className = '', 3000); }
-function filterTable(inId, tbId) { const q = document.getElementById(inId).value.toLowerCase(); document.querySelectorAll(`#${tbId} tr`).forEach(r => { r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'; }); }
+function copyText(t){navigator.clipboard.writeText(t).then(()=>toast('Copied: '+t,'success'));}
 
-// ─── Image Manager ───────────────────────────────────────────
+// ─── Utility ──────────────────────────────────────────────────
+async function delItem(table,id,cb) {
+  if(!confirm('Delete this item? This cannot be undone.'))return;
+  const idx=gData[table].findIndex(i=>i.id===id);
+  if(idx===-1){toast('Item not found','error');return;}
+  gData[table].splice(idx,1);
+  if(await saveToGithub())cb();
+}
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');document.body.style.overflow='';
+  document.getElementById(id).querySelectorAll('input:not([type=color]):not([type=hidden]),textarea').forEach(el=>el.value='');
+  document.getElementById(id).querySelectorAll('select').forEach(el=>el.selectedIndex=0);
+  document.getElementById(id).querySelectorAll('.img-preview').forEach(el=>{el.src='';el.style.display='none';});
+}
+function previewImg(inpId,preId){const url=document.getElementById(inpId).value.trim(),p=document.getElementById(preId);if(url){p.src=url;p.style.display='block';}else p.style.display='none';}
+function toast(msg,type='success'){
+  const t=document.getElementById('adminToast'),ic=document.getElementById('toastIcon'),m=document.getElementById('toastMsg');
+  const icons={success:'fa-check-circle',error:'fa-times-circle',info:'fa-info-circle',warning:'fa-exclamation-triangle'};
+  ic.className='fas '+(icons[type]||'fa-check-circle');m.textContent=msg;t.className='show '+type;
+  clearTimeout(t._to);t._to=setTimeout(()=>t.className='',3500);
+}
+function filterTable(inId,tbId){const q=document.getElementById(inId).value.toLowerCase();document.querySelectorAll(`#${tbId} tr`).forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?'':'none');}
+function genId(p){return p+'_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);}
+function genCertId(){return 'JNA-'+new Date().getFullYear()+'-'+Math.floor(10000+Math.random()*90000);}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(ov=>ov.addEventListener('click',e=>{if(e.target===ov)closeModal(ov.id);}));
+
+// ─── Image Manager ────────────────────────────────────────────
 async function loadImageManager() {
-  const grid = document.getElementById('imageManagerGrid');
-  grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--rose);"></i><p style="margin-top:1rem;">Loading images from GitHub...</p></div>';
-  if (!GITHUB_CONFIG.token) {
-    grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-key" style="font-size:2rem;color:var(--gold);"></i><p style="margin-top:1rem;">Please configure your GitHub Token in <strong>GitHub Settings</strong> first.</p></div>';
-    return;
-  }
+  const grid=document.getElementById('imageManagerGrid');
+  grid.innerHTML='<div style="text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1;"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--rose);"></i><p style="margin-top:1rem;">Loading images from GitHub...</p></div>';
+  if(!GITHUB_CONFIG.token){grid.innerHTML='<div style="text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1;"><i class="fas fa-key" style="font-size:2rem;color:var(--gold);"></i><p style="margin-top:1rem;">GitHub Token not configured.</p></div>';return;}
   try {
-    const images = await GithubStorage.listImages('images');
-    if (!images.length) {
-      grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:3rem;grid-column:1/-1;"><i class="fas fa-image" style="font-size:2rem;"></i><p style="margin-top:1rem;">No images yet. Upload your first image!</p></div>';
-      return;
-    }
-    grid.innerHTML = images.map(img => `
-      <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .2s;position:relative;" 
-           onclick="copyImageUrl('${img.url}', this)" title="Click to copy URL">
-        <img src="${img.url}" alt="${img.name}" loading="lazy"
-             style="width:100%;height:130px;object-fit:cover;display:block;"
-             onerror="this.src='https://via.placeholder.com/160x130?text=Loading...'"/>
-        <div style="padding:.5rem .6rem;background:#fff;">
-          <p style="font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${img.name}">${img.name}</p>
-          <div style="display:flex;gap:.3rem;margin-top:.3rem;">
-            <button onclick="event.stopPropagation();copyImageUrl('${img.url}',this.closest('div').parentElement)" 
-                    style="flex:1;font-size:.65rem;padding:.2rem .4rem;background:var(--rose);color:#fff;border:none;border-radius:4px;cursor:pointer;">
-              <i class="fas fa-copy"></i> Copy
-            </button>
-            <button onclick="event.stopPropagation();deleteImageFromGithub('${img.path}','${img.sha}',this.closest('div').parentElement.parentElement)"
-                    style="font-size:.65rem;padding:.2rem .4rem;background:#fee2e2;color:#dc2626;border:none;border-radius:4px;cursor:pointer;">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  } catch (e) {
-    grid.innerHTML = `<div style="text-align:center;color:var(--danger);padding:3rem;grid-column:1/-1;"><p>Error: ${e.message}</p></div>`;
-  }
-}
-
-function copyImageUrl(url, el) {
-  navigator.clipboard.writeText(url).then(() => {
-    toast('URL Copied!', 'success');
-    if (el) {
-      const orig = el.style.outline;
-      el.style.outline = '2px solid var(--rose)';
-      setTimeout(() => el.style.outline = orig, 1200);
-    }
-  }).catch(() => {
-    const t = document.createElement('textarea');
-    t.value = url; document.body.appendChild(t); t.select();
-    document.execCommand('copy'); document.body.removeChild(t);
-    toast('URL Copied!', 'success');
-  });
+    const images=await GithubStorage.listImages('images');
+    if(!images.length){grid.innerHTML='<div style="text-align:center;padding:3rem;color:var(--muted);grid-column:1/-1;"><i class="fas fa-cloud-upload-alt" style="font-size:2rem;"></i><p style="margin-top:1rem;">No images yet. Upload your first!</p></div>';return;}
+    grid.innerHTML=images.map(img=>`<div class="img-mgr-card"><img src="${img.url}" alt="${img.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/160x120?text=Err'"/><div class="img-mgr-footer"><p title="${img.name}">${img.name}</p><div class="btns"><button onclick="copyText('${img.url}');this.closest('.img-mgr-card').style.outline='2px solid var(--rose)';setTimeout(()=>this.closest('.img-mgr-card').style.outline='',1200)" style="background:var(--rose);color:#fff;"><i class="fas fa-copy"></i> Copy URL</button><button onclick="deleteImg('${img.path}','${img.sha}',this.closest('.img-mgr-card'))" style="background:#fee2e2;color:#dc2626;"><i class="fas fa-trash"></i></button></div></div></div>`).join('');
+  } catch(e){grid.innerHTML=`<div style="text-align:center;padding:3rem;color:var(--danger);grid-column:1/-1;"><p>Error: ${e.message}</p></div>`;}
 }
 
 async function uploadImagesToGithub(input) {
-  const files = Array.from(input.files);
-  if (!files.length) return;
-  if (!GITHUB_CONFIG.token) { toast('Configure GitHub Token first!', 'error'); return; }
-  const prog = document.getElementById('imageUploadProgress');
-  const status = document.getElementById('imageUploadStatus');
-  prog.style.display = 'block';
-  let done = 0;
-  for (const file of files) {
-    status.textContent = `Uploading ${file.name} (${done+1}/${files.length})...`;
-    try {
-      await GithubStorage.uploadImage(file, 'images');
-      done++;
-      toast(`Uploaded: ${file.name}`, 'success');
-    } catch(e) {
-      toast(`Failed: ${file.name} — ${e.message}`, 'error');
-    }
+  const files=Array.from(input.files);if(!files.length)return;
+  if(!GITHUB_CONFIG.token){toast('Configure GitHub Token first!','error');return;}
+  const prog=document.getElementById('imageUploadProgress'),status=document.getElementById('imageUploadStatus');
+  prog.style.display='block';let done=0;
+  for(const file of files){
+    status.textContent=`Uploading ${file.name} (${done+1}/${files.length})...`;
+    try{await GithubStorage.uploadImage(file,'images');done++;}
+    catch(e){toast('Failed: '+file.name+' — '+e.message,'error');}
   }
-  prog.style.display = 'none';
-  input.value = '';
-  status.textContent = `Done! ${done}/${files.length} uploaded.`;
+  prog.style.display='none';input.value='';
+  toast(`Done! ${done}/${files.length} uploaded`,'success');
   await loadImageManager();
 }
 
-async function deleteImageFromGithub(filePath, sha, el) {
-  if (!confirm('Delete this image?')) return;
-  try {
-    toast('Deleting...', 'info');
-    await GithubStorage.deleteImage(filePath);
-    el.remove();
-    toast('Deleted!', 'success');
-  } catch(e) {
-    toast('Delete failed: ' + e.message, 'error');
-  }
+async function deleteImg(filePath,sha,el) {
+  if(!confirm('Delete this image from GitHub?'))return;
+  try{toast('Deleting...','info');await GithubStorage.deleteImage(filePath);if(el)el.remove();toast('Image deleted!','success');}
+  catch(e){toast('Delete failed: '+e.message,'error');}
 }
 
-
+// ─── Init ─────────────────────────────────────────────────────
+window.addEventListener('load',async()=>{
+  try{const {json,sha}=await GithubStorage.getData();gData=json;gSha=sha;}catch(e){}
+  if(localStorage.getItem('jnaToken')){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    setSyncStatus('ok','Data loaded');
+    loadDashboard();
+  }
+});
 </script>
-</body>
-</html>
 </body>
 </html>
