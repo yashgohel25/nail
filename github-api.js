@@ -7,10 +7,8 @@
 // ─────────────────────────────────────────────────────────────
 
 const GITHUB_CONFIG = {
-    // ⚠️ HARDCODING YOUR TOKEN HERE WILL CAUSE GITHUB TO REVOKE IT! ⚠️
-    // Instead, leave this blank. The admin panel will prompt you to enter
-    // your token and and it will be saved safely in your browser locally.
-    token: localStorage.getItem('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') || '',
+    // ⚠️ WARNING: If this repository is public, GitHub will automatically revoke this token.
+    token: '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',
     owner: 'yashgohel25',
     repo: 'nail',
     branch: 'main',
@@ -18,41 +16,19 @@ const GITHUB_CONFIG = {
 };
 
 // ── Base fetch wrapper ────────────────────────────────────────
-async function ghFetch(url, options = {}, isRetry = false) {
+async function ghFetch(url, options = {}) {
     const headers = {
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json',
         ...options.headers
     };
 
-    let token = localStorage.getItem('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') || GITHUB_CONFIG.token;
-    
-    // If we are doing a PUT/DELETE/POST but don't have a token, ask for it
-    if ((!token || token.length < 10) && options.method && options.method !== 'GET') {
-        token = prompt("GitHub Token is required to save changes.\n\nPlease enter your GitHub Personal Access Token:");
-        if (token) {
-            localStorage.setItem('gh_admin_token', token);
-            GITHUB_CONFIG.token = token;
-        }
-    }
-
-    if (token && token.length > 10) {
-        headers['Authorization'] = `token ${token}`;
+    if (GITHUB_CONFIG.token && GITHUB_CONFIG.token.length > 10) {
+        headers['Authorization'] = `token ${GITHUB_CONFIG.token}`;
     }
     
     const res = await fetch(url, { ...options, headers });
     
-    // Handle Token Expiration or Invalid Token
-    if (res.status === 401 && !isRetry && options.method && options.method !== 'GET') {
-        const newToken = prompt("Your GitHub Token is invalid, expired, or was revoked.\n\nPlease generate a new one and paste it here:");
-        if (newToken) {
-            localStorage.setItem('gh_admin_token', newToken);
-            GITHUB_CONFIG.token = newToken;
-            headers['Authorization'] = `token ${newToken}`;
-            return await ghFetch(url, options, true); // Retry the request once
-        }
-    }
-
     if (!res.ok) {
         let errMsg = `GitHub API Error ${res.status}`;
         try { const e = await res.json(); errMsg = e.message || errMsg; } catch { }
@@ -66,10 +42,7 @@ const GithubStorage = {
 
     // Check if token is configured
     hasToken() {
-        // Now mostly handled by ghFetch prompt, but we still return true
-        // so the UI buttons remain enabled.
-        const token = localStorage.getItem('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') || GITHUB_CONFIG.token;
-        return token && token.length > 10;
+        return GITHUB_CONFIG.token && GITHUB_CONFIG.token.length > 10;
     },
 
     // Read data.json from GitHub (returns { json, sha })
