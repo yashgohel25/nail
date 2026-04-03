@@ -3,9 +3,47 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const PORT = 3000;
+// Load .env file for local development
+try {
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    fs.readFileSync(envPath, 'utf8').split('\n').forEach(line => {
+      const [key, ...vals] = line.trim().split('=');
+      if (key && !process.env[key]) process.env[key] = vals.join('=').replace(/^["']|["']$/g, '');
+    });
+  }
+} catch (e) { /* ignore */ }
+
+const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data.json');
 const PUBLIC_DIR = __dirname;
+
+// ─── GitHub Config (from environment variables) ─────────────
+const GH = {
+  token: process.env.GITHUB_TOKEN || '',
+  owner: process.env.GITHUB_OWNER || 'yashgohel25',
+  repo: process.env.GITHUB_REPO || 'nail',
+  branch: process.env.GITHUB_BRANCH || 'main',
+  path: process.env.GITHUB_PATH || 'data.json'
+};
+
+// ─── GitHub API Helper ───────────────────────────────────────
+async function ghFetch(apiUrl, options = {}) {
+  const { default: nodeFetch } = await import('node-fetch').catch(() => ({ default: null }));
+  const fetchFn = nodeFetch || fetch; // node 18+ has built-in fetch
+
+  const headers = {
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+    'Authorization': `token ${GH.token}`,
+    'User-Agent': 'JankiNailArt-Admin/1.0',
+    ...options.headers
+  };
+  const res = await fetchFn(apiUrl, { ...options, headers });
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.message || `GitHub API Error ${res.status}`);
+  return body;
+}
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -396,6 +434,96 @@ const server = http.createServer(async (req, res) => {
         writeData(data);
         return json(res, 200, { success: true });
       }
+    }
+
+    // ── GitHub Proxy ──────────────────────────────────────────────────────
+    // GET /api/github-proxy/data  →  read data.json from GitHub
+    if (pathname === '/api/github-proxy/data' && method === 'GET') {
+      if (!GH.token) return json(res, 500, { message: 'GITHUB_TOKEN not configured on server' });
+      const apiUrl = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}?ref=${GH.branch}&t=${Date.now()}`;
+      const ghData = await ghFetch(apiUrl);
+      const clean = ghData.content.replace(/\n/g, '');
+      const content = Buffer.from(clean, 'base64').toString('utf8');
+      return json(res, 200, { json: JSON.parse(content), sha: ghData.sha });
+    }
+
+    // PUT /api/github-proxy/data  →  write data.json to GitHub
+    if (pathname === '/api/github-proxy/data' && method === 'PUT') {
+      if (!GH.token) return json(res, 500, { message: 'GITHUB_TOKEN not configured on server' });
+      const body = await parseBody(req);
+      const content = Buffer.from(JSON.stringify(body.data, null, 2)).toString('base64');
+      const apiUrl = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.path}`;
+      const payload = {
+        message: `Update data.json via Admin Panel [${new Date().toLocaleString('en-IN')}]`,
+        content,
+        branch: GH.branch
+      };
+      if (body.sha) payload.sha = body.sha;
+      const result = await ghFetch(apiUrl, { method: 'PUT', body: JSON.stringify(payload) });
+      return json(res, 200, result);
+    }
+
+    // POST /api/github-proxy/upload  →  upload image to GitHub
+    if (pathname === '/api/github-proxy/upload' && method === 'POST') {
+      if (!GH.token) return json(res, 500, { message: 'GITHUB_TOKEN not configured on server' });
+      const body = await parseBody(req);
+      const { fileName, folder = 'images', base64Content } = body;
+      const filePath = `${folder}/${fileName}`;
+      const apiUrl = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${filePath}`;
+      await ghFetch(apiUrl, {
+        method: 'PUT',
+        body: JSON.stringify({
+          message: `Upload image: ${fileName}`,
+          content: base64Content,
+          branch: GH.branch
+        })
+      });
+      const cdnUrl = `https://cdn.jsdelivr.net/gh/${GH.owner}/${GH.repo}@${GH.branch}/${filePath}`;
+      return json(res, 200, { url: cdnUrl });
+    }
+
+    // DELETE /api/github-proxy/delete-image  →  delete image from GitHub
+    if (pathname === '/api/github-proxy/delete-image' && method === 'DELETE') {
+      if (!GH.token) return json(res, 500, { message: 'GITHUB_TOKEN not configured on server' });
+      const body = await parseBody(req);
+      const { filePath } = body;
+      const apiUrl = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${filePath}`;
+      const fileInfo = await ghFetch(`${apiUrl}?ref=${GH.branch}`);
+      await ghFetch(apiUrl, {
+        method: 'DELETE',
+        body: JSON.stringify({
+          message: `Delete image: ${filePath}`,
+          sha: fileInfo.sha,
+          branch: GH.branch
+        })
+      });
+      return json(res, 200, { success: true });
+    }
+
+    // GET /api/github-proxy/images  →  list images
+    if (pathname === '/api/github-proxy/images' && method === 'GET') {
+      if (!GH.token) return json(res, 200, []);
+      const folder = parsed.query.folder || 'images';
+      try {
+        const apiUrl = `https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${folder}?ref=${GH.branch}&t=${Date.now()}`;
+        const files = await ghFetch(apiUrl);
+        const images = files
+          .filter(f => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f.name))
+          .map(f => ({
+            name: f.name,
+            path: f.path,
+            url: `https://cdn.jsdelivr.net/gh/${GH.owner}/${GH.repo}@${GH.branch}/${f.path}`,
+            sha: f.sha
+          }));
+        return json(res, 200, images);
+      } catch { return json(res, 200, []); }
+    }
+
+    // GET /api/github-proxy/test  →  test connection
+    if (pathname === '/api/github-proxy/test' && method === 'GET') {
+      if (!GH.token) return json(res, 500, { message: 'GITHUB_TOKEN not configured' });
+      const result = await ghFetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}`);
+      return json(res, 200, { ok: true, repo: result.full_name });
     }
 
     // ── Stats ─────────────────────────────────────────────────────────────
