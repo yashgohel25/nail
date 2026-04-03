@@ -1,15 +1,10 @@
 {
   "version": 2,
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "admin.html", "use": "@vercel/static" },
-    { "src": "github-api.js", "use": "@vercel/static" },
-    { "src": "data.json", "use": "@vercel/static" }
+    { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/admin", "dest": "/admin.html" },
-    { "src": "/admin/", "dest": "/admin.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/(.*)", "dest": "/server.js" }
   ],
   "headers": [
     {
