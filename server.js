@@ -20,11 +20,11 @@ const PUBLIC_DIR = __dirname;
 
 // ─── GitHub Config (from environment variables) ─────────────
 const GH = {
-  token: process.env.GITHUB_TOKEN || '',
-  owner: process.env.GITHUB_OWNER || 'yashgohel25',
-  repo: process.env.GITHUB_REPO || 'nail',
+  token:  process.env.GITHUB_TOKEN  || '',
+  owner:  process.env.GITHUB_OWNER  || 'yashgohel25',
+  repo:   process.env.GITHUB_REPO   || 'nail',
   branch: process.env.GITHUB_BRANCH || 'main',
-  path: process.env.GITHUB_PATH || 'data.json'
+  path:   process.env.GITHUB_PATH   || 'data.json'
 };
 
 // ─── GitHub API Helper ───────────────────────────────────────
