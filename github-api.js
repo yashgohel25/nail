@@ -8,7 +8,7 @@
 
 const GITHUB_CONFIG = {
     // ⚠️ WARNING: If this repository is public, GitHub will automatically revoke this token.
-    token: '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',
+    token: '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',
     owner: 'yashgohel25',
     repo: 'nail',
     branch: 'main',
