@@ -1,86 +1,44 @@
 // ─────────────────────────────────────────────────────────────
 //  GitHub Storage API  –  Janki Nail Art
-//  Token is hardcoded here (not in admin panel).
-//  To regenerate: GitHub → Settings → Developer Settings →
-//  Personal Access Tokens → Fine-grained tokens → New token
-//  Required permissions: Contents (read & write)
+//  Token is stored securely in GITHUB_TOKEN environment variable
+//  on the server. This file calls the backend proxy (/api/github-proxy)
+//  so the token is NEVER exposed in the browser.
 // ─────────────────────────────────────────────────────────────
 
-const GITHUB_CONFIG = {
-    // ⚠️ WARNING: If this repository is public, GitHub will automatically revoke this token.
-    token: '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',
-    owner: 'yashgohel25',
-    repo: 'nail',
-    branch: 'main',
-    path: 'data.json'
-};
-
-// ── Base fetch wrapper ────────────────────────────────────────
-async function ghFetch(url, options = {}) {
-    const headers = {
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json',
-        ...options.headers
-    };
-
-    if (GITHUB_CONFIG.token && GITHUB_CONFIG.token.length > 10) {
-        headers['Authorization'] = `token ${GITHUB_CONFIG.token}`;
-    }
-    
-    const res = await fetch(url, { ...options, headers });
-    
-    if (!res.ok) {
-        let errMsg = `GitHub API Error ${res.status}`;
-        try { const e = await res.json(); errMsg = e.message || errMsg; } catch { }
-        throw new Error(errMsg);
-    }
-    return res.json();
-}
-
-// ── Main storage object ───────────────────────────────────────
 const GithubStorage = {
 
-    // Check if token is configured
     hasToken() {
-        return GITHUB_CONFIG.token && GITHUB_CONFIG.token.length > 10;
+        return true; // Token is on the server side
     },
 
-    // Read data.json from GitHub (returns { json, sha })
+    // Read data.json from GitHub via backend proxy
     async getData() {
-        try {
-            const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}?ref=${GITHUB_CONFIG.branch}&t=${Date.now()}`;
-            const data = await ghFetch(url);
-            const clean = data.content.replace(/\n/g, '');
-            const content = decodeURIComponent(escape(atob(clean)));
-            return { json: JSON.parse(content), sha: data.sha };
-        } catch (e) {
-            console.warn('GitHub getData fallback:', e.message);
-            // Fallback: read local data.json
-            const r = await fetch('data.json?t=' + Date.now());
-            if (!r.ok) throw new Error('Cannot load data.json');
-            const localData = await r.json();
-            return { json: localData, sha: null };
-        }
-    },
-
-    // Write data.json to GitHub
-    async saveData(newData, sha) {
-        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.path}`;
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
-        const body = {
-            message: `Update data.json via Admin Panel [${new Date().toLocaleString('en-IN')}]`,
-            content,
-            branch: GITHUB_CONFIG.branch
-        };
-        if (sha) body.sha = sha;
-        const res = await ghFetch(url, {
-            method: 'PUT',
-            body: JSON.stringify(body)
+        const res = await fetch('/api/github-proxy/data', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
         });
-        return res;
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to load data');
+        }
+        return await res.json(); // returns { json, sha }
     },
 
-    // Upload an image file → saves to images/ folder in repo → returns CDN URL
+    // Write data.json to GitHub via backend proxy
+    async saveData(newData, sha) {
+        const res = await fetch('/api/github-proxy/data', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: newData, sha })
+        });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to save data');
+        }
+        return await res.json(); // returns { content: { sha } }
+    },
+
+    // Upload image via backend proxy
     async uploadImage(file, folder = 'images') {
         const base64Content = await new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -96,59 +54,46 @@ const GithubStorage = {
             .toLowerCase()
             .substring(0, 40);
         const fileName = `${Date.now()}_${safeName}.${ext}`;
-        const filePath = `${folder}/${fileName}`;
-        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${filePath}`;
 
-        await ghFetch(url, {
-            method: 'PUT',
-            body: JSON.stringify({
-                message: `Upload image: ${fileName}`,
-                content: base64Content,
-                branch: GITHUB_CONFIG.branch
-            })
+        const res = await fetch('/api/github-proxy/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileName, folder, base64Content, mimeType: file.type })
         });
-
-        return `https://cdn.jsdelivr.net/gh/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}@${GITHUB_CONFIG.branch}/${filePath}`;
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Upload failed');
+        }
+        const result = await res.json();
+        return result.url;
     },
 
-    // Delete an image from the repo
+    // Delete image via backend proxy
     async deleteImage(filePath) {
-        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${filePath}`;
-        const fileInfo = await ghFetch(url + `?ref=${GITHUB_CONFIG.branch}`);
-        await ghFetch(url, {
+        const res = await fetch('/api/github-proxy/delete-image', {
             method: 'DELETE',
-            body: JSON.stringify({
-                message: `Delete image: ${filePath}`,
-                sha: fileInfo.sha,
-                branch: GITHUB_CONFIG.branch
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filePath })
         });
-    },
-
-    // List all images in a folder
-    async listImages(folder = 'images') {
-        try {
-            const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${folder}?ref=${GITHUB_CONFIG.branch}&t=${Date.now()}`;
-            const files = await ghFetch(url);
-            return files
-                .filter(f => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f.name))
-                .map(f => ({
-                    name: f.name,
-                    path: f.path,
-                    url: `https://cdn.jsdelivr.net/gh/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}@${GITHUB_CONFIG.branch}/${f.path}`,
-                    sha: f.sha
-                }));
-        } catch {
-            return [];
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Delete failed');
         }
     },
 
-    // Test connection
+    // List images via backend proxy
+    async listImages(folder = 'images') {
+        const res = await fetch(`/api/github-proxy/images?folder=${encodeURIComponent(folder)}`);
+        if (!res.ok) return [];
+        return await res.json();
+    },
+
+    // Test connection via backend proxy
     async testConnection() {
-        const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}`;
-        return await ghFetch(url);
+        const res = await fetch('/api/github-proxy/test');
+        if (!res.ok) throw new Error('Connection test failed');
+        return await res.json();
     }
 };
 
 window.GithubStorage = GithubStorage;
-window.GITHUB_CONFIG = GITHUB_CONFIG;
