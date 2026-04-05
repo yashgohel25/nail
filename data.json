@@ -1,0 +1,353 @@
+{
+  "siteInfo": {
+    "name": "Janki Nail Art",
+    "tagline": "Art Meets Beauty",
+    "phone": "9955570707",
+    "email": "jankinailart@gmail.com",
+    "address": "B-604, Abhilasha Height, Opp. Satyam Pushpvan Bunglow, Gopal Chowk, Nikol, Ahmedabad",
+    "whatsapp": "919955570707",
+    "instagram": "https://www.instagram.com/janki_nailstudio._/",
+    "description": "Professional nail art studio offering the best nail art services in Ahmedabad. Specializing in gel polish, nail extensions, and creative nail art designs.",
+    "established": "2020",
+    "openHours": "Mon-Sat: 10:00 AM - 8:00 PM",
+    "heroImage": "/images/1775229298841_poster.png",
+    "heroImage2": "/images/1775373794953_1.jpg"
+  },
+  "admin": {
+    "username": "admin",
+    "password": "janki@2024"
+  },
+  "services": [
+    {
+      "id": "s1",
+      "category": "Basic",
+      "name": "Classic Manicure",
+      "description": "Traditional nail shaping, cuticle care, and polish",
+      "price": 299,
+      "duration": "45 min",
+      "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400"
+    },
+    {
+      "id": "s2",
+      "category": "Gel",
+      "name": "Gel Polish",
+      "description": "Long-lasting gel nail polish that shines for weeks",
+      "price": 599,
+      "duration": "60 min",
+      "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400"
+    },
+    {
+      "id": "s3",
+      "category": "Extensions",
+      "name": "Nail Extensions",
+      "description": "Beautiful acrylic or gel nail extensions",
+      "price": 999,
+      "duration": "90 min",
+      "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400"
+    },
+    {
+      "id": "s4",
+      "category": "Art",
+      "name": "Nail Art Design",
+      "description": "Custom nail art with intricate patterns and designs",
+      "price": 799,
+      "duration": "75 min",
+      "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400"
+    },
+    {
+      "name": "xyz",
+      "category": "xyz",
+      "price": 999,
+      "duration": "60 min",
+      "description": "dfsdfsdfsdfsdf",
+      "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600",
+      "id": "s_1774966699305_ha5b5h"
+    }
+  ],
+  "courses": [
+    {
+      "id": "c1",
+      "title": "Basic Nail Art Course",
+      "type": "online",
+      "duration": "15 Days",
+      "fee": 4999,
+      "description": "Learn the fundamentals of nail art including basic designs, color theory, and nail care.",
+      "topics": [
+        "Nail Anatomy & Care",
+        "Basic Nail Art",
+        "Polish Techniques",
+        "Simple Designs"
+      ],
+      "seats": 10,
+      "schedule": "Weekdays 11AM-1PM",
+      "certificate": true,
+      "active": true
+    },
+    {
+      "id": "c2",
+      "title": "Advanced Nail Art Course",
+      "type": "both",
+      "duration": "30 Days",
+      "fee": 9999,
+      "description": "Master advanced techniques including gel, extensions, 3D art, and professional nail care.",
+      "topics": [
+        "Gel Nails",
+        "Nail Extensions",
+        "3D Nail Art",
+        "Nail Business Setup",
+        "Advanced Designs"
+      ],
+      "seats": 8,
+      "schedule": "Weekdays 2PM-5PM",
+      "certificate": true,
+      "active": true
+    },
+    {
+      "id": "c3",
+      "title": "Online Nail Art Basics",
+      "type": "online",
+      "duration": "21 Days",
+      "fee": 2999,
+      "description": "Learn nail art from the comfort of your home with live sessions and recorded videos.",
+      "topics": [
+        "Nail Care Basics",
+        "Color Theory",
+        "Simple Art Designs",
+        "DIY Techniques"
+      ],
+      "seats": 30,
+      "schedule": "Weekends 10AM-12PM via Zoom",
+      "certificate": true,
+      "active": true
+    },
+    {
+      "id": "c4",
+      "title": "Professional Nail Tech Online",
+      "type": "offline",
+      "duration": "45 Days",
+      "fee": 5999,
+      "description": "Complete professional nail technician training online with certification.",
+      "topics": [
+        "Professional Techniques",
+        "Gel & Acrylic",
+        "Nail Extensions",
+        "Client Management",
+        "Pricing Strategy"
+      ],
+      "seats": 20,
+      "schedule": "Mon/Wed/Fri 7PM-9PM via Zoom",
+      "certificate": true,
+      "active": true
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "title": "French Tip Design",
+      "category": "Classic",
+      "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600",
+      "featured": true,
+      "addedDate": "2024-01-15"
+    },
+    {
+      "title": "new classs",
+      "category": "dsadasds",
+      "imageUrl": "https://ik.imagekit.io/newcarimage/myimage/Ertiga%201.jpg",
+      "featured": true,
+      "id": "g_1774884858012_1zbobx",
+      "addedDate": "2026-04-05"
+    },
+    {
+      "title": "xyz",
+      "category": "",
+      "imageUrl": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600",
+      "featured": false,
+      "id": "g_1774968447387_ulvrpy",
+      "addedDate": "2026-03-31"
+    },
+    {
+      "id": "g_1775373799162_xoc40v",
+      "title": "xyz",
+      "category": "Classic",
+      "imageUrl": "/images/1775373794953_1.jpg",
+      "featured": true,
+      "addedDate": "2026-04-05"
+    },
+    {
+      "id": "g_1775375137009_6firus",
+      "title": "xyz",
+      "category": "Classic",
+      "imageUrl": "/images/1775375128572_13.jpg",
+      "featured": true,
+      "addedDate": "2026-04-05"
+    }
+  ],
+  "offers": [
+    {
+      "id": "o1",
+      "title": "New Year Special",
+      "type": "festive",
+      "description": "Get 30% off on all nail extensions this New Year!",
+      "discount": 30,
+      "discountType": "percent",
+      "validFrom": "2025-01-01",
+      "validTo": "2025-01-31",
+      "active": true,
+      "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600",
+      "bgColor": "#e91e63"
+    },
+    {
+      "id": "o2",
+      "title": "Student Discount",
+      "type": "discount",
+      "description": "Special 20% discount for course students on all services",
+      "discount": 20,
+      "discountType": "percent",
+      "validFrom": "2025-01-01",
+      "validTo": "2025-12-31",
+      "active": true,
+      "image": "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600",
+      "bgColor": "#9c27b0"
+    },
+    {
+      "title": "Student Discount",
+      "type": "offer",
+      "discount": 10,
+      "discountType": "percent",
+      "validFrom": "2026-04-01",
+      "validTo": "2026-04-05",
+      "description": "mahavir jayanti spical courese",
+      "bgColor": "#373cc8",
+      "active": true,
+      "id": "o_1774966812615_pe66vd"
+    },
+    {
+      "id": "o_1775375427203_9apcgj",
+      "title": "summer courese",
+      "type": "discount",
+      "discount": 50,
+      "discountType": "percent",
+      "validFrom": "2026-04-01",
+      "validTo": "2026-06-01",
+      "description": "50% discount all couress",
+      "bgColor": "#000000",
+      "active": true
+    }
+  ],
+  "inquiries": [],
+  "students": [
+    {
+      "name": "gohel yash",
+      "phone": "987654321",
+      "email": "yashgohel55318@gmail.com",
+      "course": "grd",
+      "batch": "jan 2025 B.tech",
+      "mode": "online",
+      "enrollDate": "2026-03-31",
+      "status": "completed",
+      "notes": "jmksdnfodsfosdfosdof;sdo;fjsdo;f",
+      "id": "st_1774966447535_071ju3",
+      "certId": "JNA-2026-55273",
+      "completionDate": "2026-03-31"
+    },
+    {
+      "name": "raj",
+      "phone": "987654321",
+      "email": "yashgohel55318@gmail.com",
+      "course": "grd",
+      "batch": "jan 2025",
+      "mode": "online",
+      "enrollDate": "2026-03-31",
+      "status": "completed",
+      "notes": "",
+      "id": "st_1774968506902_ropeqr",
+      "certId": "JNA-2026-92103",
+      "completionDate": "2026-03-31"
+    },
+    {
+      "name": "jenish gohel",
+      "phone": "7878454520",
+      "email": "demo@gmail.com",
+      "course": "agro",
+      "batch": "march 2026  Batch",
+      "mode": "online",
+      "enrollDate": "2026-03-31",
+      "status": "completed",
+      "notes": "bjbb",
+      "id": "st_1774971458372_kfzgu6",
+      "certId": "JNA-2026-41196",
+      "completionDate": "2026-03-31"
+    },
+    {
+      "id": "st_1775224639312_zhyb5o",
+      "enrollDate": "2026-04-04",
+      "status": "completed",
+      "certId": "JNA-2026-85281",
+      "name": "jay dhamacha",
+      "phone": "787845120",
+      "email": "yay@gmail.com",
+      "course": "xyz",
+      "batch": "feb 2025 Batch",
+      "mode": "online",
+      "notes": "",
+      "completionDate": "2026-04-03"
+    },
+    {
+      "id": "st_1775381192914_mau22f",
+      "enrollDate": "2026-04-06",
+      "status": "completed",
+      "certId": "JNA-2026-51152",
+      "name": "pooja gohil",
+      "phone": "8787454521",
+      "email": "gohil@gmail.com",
+      "course": "xyz",
+      "batch": "jun 2025",
+      "mode": "online",
+      "notes": "",
+      "completionDate": "2026-04-05"
+    }
+  ],
+  "bookings": [],
+  "certificates": [
+    {
+      "certId": "JNA-2026-55273",
+      "studentId": "st_1774966447535_071ju3",
+      "studentName": "gohel yash",
+      "course": "grd",
+      "issueDate": "2026-03-31",
+      "valid": true
+    },
+    {
+      "certId": "JNA-2026-92103",
+      "studentId": "st_1774968506902_ropeqr",
+      "studentName": "raj",
+      "course": "grd",
+      "issueDate": "2026-03-31",
+      "valid": true
+    },
+    {
+      "certId": "JNA-2026-41196",
+      "studentId": "st_1774971458372_kfzgu6",
+      "studentName": "jenish gohel",
+      "course": "agro",
+      "issueDate": "2026-03-31",
+      "valid": true
+    },
+    {
+      "certId": "JNA-2026-85281",
+      "studentId": "st_1775224639312_zhyb5o",
+      "studentName": "jay dhamacha",
+      "course": "xyz",
+      "issueDate": "2026-04-03",
+      "valid": true
+    },
+    {
+      "certId": "JNA-2026-51152",
+      "studentId": "st_1775381192914_mau22f",
+      "studentName": "pooja gohil",
+      "course": "xyz",
+      "issueDate": "2026-04-05",
+      "valid": true
+    }
+  ]
+}
